@@ -28,7 +28,7 @@ public class BreadthFirstIterator<N> implements Iterator<N> {
         // add all unvisited neighbors of curr to the stack
         queue.addAll(graph.getNeighbours(curr)
             .stream().filter(a -> !visited.contains(a))
-            .collect(Collectors.toList()));
+            .toList());
 
         return curr;
     }

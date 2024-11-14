@@ -38,9 +38,8 @@ class WeightedGraphTest {
             () -> assertTrue(loop.hasEdge(1, 2, 2)),
             () -> assertFalse(loop.hasEdge(1, 3, 2)),
             () -> assertFalse(loop.hasEdge(1, 1, 3)),
-            () -> assertFalse(loop.hasEdge(1, 1, 8)),
-            () -> assertThrows(RuntimeException.class, () -> singleNode.hasEdge(1, 2, 100)),
-            () -> assertThrows(RuntimeException.class, () -> singleNode.hasEdge(-100, 2, 100))
+            () -> assertThrows(IllegalArgumentException.class, () -> singleNode.hasEdge(1, 2, 100)),
+            () -> assertThrows(IllegalArgumentException.class, () -> singleNode.hasEdge(-100, 2, 100))
         );
     }
 
@@ -50,8 +49,8 @@ class WeightedGraphTest {
             () -> assertEquals(Pair.of(List.of(1, 2, 3), 5d), loop.dijkstras(1, 3, a -> a.getEdge().doubleValue()).get()),
             () -> assertEquals(Pair.of(List.of(1), 0d), loop.dijkstras(1, 1, a -> a.getEdge().doubleValue()).get()),
             () -> assertEquals(Optional.empty(), disconnected.dijkstras(1, 2, a -> a.getEdge().doubleValue())),
-            () -> assertThrows(RuntimeException.class, () -> disconnected.dijkstras(1, 100, a -> a.getEdge().doubleValue())),
-            () -> assertThrows(RuntimeException.class, () -> disconnected.dijkstras(-100, 100, a -> a.getEdge().doubleValue()))
+            () -> assertThrows(IllegalArgumentException.class, () -> disconnected.dijkstras(1, 100, a -> a.getEdge().doubleValue())),
+            () -> assertThrows(IllegalArgumentException.class, () -> disconnected.dijkstras(-100, 100, a -> a.getEdge().doubleValue()))
         );
     }
 }

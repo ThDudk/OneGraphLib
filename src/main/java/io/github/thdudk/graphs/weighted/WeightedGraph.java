@@ -1,6 +1,9 @@
 package io.github.thdudk.graphs.weighted;
 
 import static io.github.thdudk.graphs.GraphValidator.requireContained;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonValue;
 import io.github.thdudk.graphs.unweighted.Graph;
 import lombok.Value;
 import org.apache.commons.lang3.tuple.Pair;
@@ -32,6 +35,12 @@ public interface WeightedGraph<N, E> extends Graph<N> {
      * @throws IllegalArgumentException If root is not contained in this
      */
     Set<EdgeEndpointPair<N, E>> getEdges(N root);
+    @JsonValue
+    default Map<N, Set<EdgeEndpointPair<N, E>>> getWeightedAdjacencyList() {
+        Map<N, Set<EdgeEndpointPair<N, E>>> map = new HashMap<>();
+        for(N node : getNodes()) map.put(node, getEdges(node));
+        return map;
+    }
     /**
      * Any true call to this function does not guarantee that the inverse call is true as well.
      * <p>If hasEdge(1, e, 2) is true, hasEdge(2, e, 1) may not be.
@@ -42,6 +51,7 @@ public interface WeightedGraph<N, E> extends Graph<N> {
      * @throws IllegalArgumentException If root or endpoint are not contained in this
      */
     default boolean hasEdge(N root, E edge, N endpoint) {
+        requireContained(List.of(root, endpoint), this);
         return getEdges(root).contains(new EdgeEndpointPair<>(edge, endpoint));
     }
 

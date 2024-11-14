@@ -12,11 +12,19 @@ public interface GraphBuilder<N> {
         addOutNeighbor(node2, node1);
         return this;
     }
-    default GraphBuilder<N> addNeighborChain(List<N> nodes, boolean undirected) {
+    default GraphBuilder<N> addUndirNeighborChain(List<N> nodes) {
         N prev = null;
         for(N node : nodes) {
             if(prev == null) addNode(node);
-            else if(undirected) addNeighbor(prev, node);
+            else addNeighbor(prev, node);
+            prev = node;
+        }
+        return this;
+    }
+    default GraphBuilder<N> addDirNeighborChain(List<N> nodes) {
+        N prev = null;
+        for(N node : nodes) {
+            if(prev == null) addNode(node);
             else addOutNeighbor(prev, node);
             prev = node;
         }

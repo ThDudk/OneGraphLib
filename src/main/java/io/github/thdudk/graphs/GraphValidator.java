@@ -16,7 +16,7 @@ public class GraphValidator {
      * @throws IllegalArgumentException If any of the provided nodes are not contained in this
      */
     public static <N> void requireContained(Collection<N> nodes, Graph<N> graph) {
-        List<N> notContained = nodes.stream().filter(a -> !graph.hasNode(a)).collect(Collectors.toList());
+        List<N> notContained = nodes.stream().filter(a -> a == null || !graph.hasNode(a)).toList();
 
         if(notContained.isEmpty()) return;
         throw new IllegalArgumentException("Given nodes must be within the graph. Illegal nodes: " + notContained);

@@ -1,6 +1,5 @@
 package io.github.thdudk.graphs;
 
-import io.github.thdudk.construction.GraphFactory;
 import io.github.thdudk.construction.builders.GraphBuilderImpl;
 import io.github.thdudk.graphs.unweighted.Graph;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GraphValidatorTest {
     Graph<Integer> graph = new GraphBuilderImpl<Integer>()
-        .addNeighborChain(List.of(1, 2, 3, 4), false).build();
+        .addDirNeighborChain(List.of(1, 2, 3, 4)).build();
 
     @Test
     void requireContained() {
