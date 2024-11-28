@@ -2,9 +2,10 @@ package io.github.thdudk.graphs.unweighted;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.thdudk.iterators.BreadthFirstIterator;
-import lombok.NonNull;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import static io.github.thdudk.graphs.GraphValidator.requireContained;
 
@@ -46,6 +47,12 @@ public interface Graph<N> {
     default boolean isNeighbor(N root, N neighbor) {
         requireContained(List.of(root, neighbor), this);
         return getNeighbours(root).contains(neighbor);
+    }
+    default Optional<N> findNode(Predicate<N> predicate) {
+        for(N node : getNodes()) {
+            if(predicate.test(node)) return Optional.of(node);
+        }
+        return Optional.empty();
     }
 
     /**

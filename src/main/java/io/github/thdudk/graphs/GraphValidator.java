@@ -4,7 +4,6 @@ import io.github.thdudk.graphs.unweighted.Graph;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Simple class that throws detailed exceptions when certain conditions are not being held

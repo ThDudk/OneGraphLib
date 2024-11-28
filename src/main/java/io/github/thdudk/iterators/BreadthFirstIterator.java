@@ -3,7 +3,6 @@ package io.github.thdudk.iterators;
 import io.github.thdudk.graphs.unweighted.Graph;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class BreadthFirstIterator<N> implements Iterator<N> {
     private final Graph<N> graph;

@@ -1,8 +1,5 @@
 package io.github.thdudk.graphs.weighted;
 
-import static io.github.thdudk.graphs.GraphValidator.requireContained;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.github.thdudk.graphs.unweighted.Graph;
 import lombok.Value;
@@ -11,6 +8,8 @@ import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.*;
 import java.util.function.Function;
+
+import static io.github.thdudk.graphs.GraphValidator.requireContained;
 
 /**
  * Representation of the Graph data structure with edges containing data.

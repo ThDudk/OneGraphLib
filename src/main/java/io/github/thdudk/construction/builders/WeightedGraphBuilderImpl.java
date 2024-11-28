@@ -4,7 +4,6 @@ import io.github.thdudk.construction.restrictions.WeightedGraphRestriction;
 import io.github.thdudk.graphs.weighted.AdjacencyListWeightedGraphImpl;
 import io.github.thdudk.graphs.weighted.WeightedGraph;
 import io.github.thdudk.graphs.weighted.WeightedGraph.EdgeEndpointPair;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
