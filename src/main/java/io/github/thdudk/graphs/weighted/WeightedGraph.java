@@ -2,11 +2,14 @@ package io.github.thdudk.graphs.weighted;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.github.thdudk.graphs.unweighted.Graph;
+import io.github.thdudk.iterators.DijkstraIterator;
 import lombok.Value;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
+import javax.swing.text.html.Option;
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static io.github.thdudk.graphs.GraphValidator.requireContained;
@@ -57,49 +60,49 @@ public interface WeightedGraph<N, E> extends Graph<N> {
     // TODO add a shortest path algorithm that supports negative weights
     /**
      * Finds the shortest path from start to end taking weights into account using Dijkstra's algorithm.
-     * <p>Note: Dijkstra's algorithm does NOT support negative weights and having a negative weight may result in stack overflow.
+     * <p>Note: Dijkstra's algorithm does NOT support weights <= 0 and these cases will often result in an infinite loop.
      * There are cases, however, where a negative weight will not result in a StackOverflowError.
      * <p>if there is a possibility of a negative weight appearing, an algorithm that supports negative weights should be used instead.
      * @param start starting node
      * @param end end node
-     * @param weightFunction Function that takes in an EdgeEndpointPair and returns a Numerical weight
+     * @param pathCompressor Function that converts a path's weight and a new edge into a new weight. Must handle null values.
      * @return The shortest path from start to end
      * @throws StackOverflowError A negative cycle is formed.
      * @throws IllegalArgumentException If start or end are not contained in this
      * @see #shortestPath
      */
-    default Optional<Pair<List<N>, Double>> dijkstras(N start, N end, Function<EdgeEndpointPair<N, E>, Double> weightFunction) {
+    default <C extends Comparable<C>> Optional<List<EdgeEndpointPair<N, E>>> dijkstras(N start, N end, BiFunction<C, EdgeEndpointPair<N, E>, C> pathCompressor) {
         // validates the graph contains start and end
         requireContained(List.of(start, end), this);
 
-        // algorithms starts here
-        // (node, (distance, edge to, root))
-        Map<N, Triple<Double, E, N>> distances = new HashMap<>();
-        PriorityQueue<N> queue = new PriorityQueue<>(Comparator.comparing((N e) -> distances.get(e).getLeft()));
-        queue.offer(start);
-        distances.put(start, Triple.of(0.0, null, null));
+        DijkstraIterator<N, E, C> iterator = new DijkstraIterator<>(this, start, pathCompressor, C::compareTo);
 
-        while(true) {
-            if(queue.isEmpty()) return Optional.empty();
-            N curr = queue.poll();
+        Map<N, Pair<E, N>> paths = new HashMap<>();
+        paths.put(start, Pair.of(null, null));
 
-            if(curr.equals(end)) break;
-
-            for(EdgeEndpointPair<N, E> edge : getEdges(curr)) {
-                double dist = distances.get(curr).getLeft() + weightFunction.apply(edge);
-                if(distances.containsKey(edge.getEndpoint()) && distances.get(edge.getEndpoint()).getLeft() <= dist) continue;
-
-                distances.put(edge.getEndpoint(), Triple.of(dist, edge.getEdge(), curr));
-                queue.offer(edge.getEndpoint());
-            }
+        // get the shortest distance paths
+        // cannot have an early exit because an early exit may result in
+        while (iterator.hasNext()) {
+            N curr = iterator.next();
+            paths.put(curr, iterator.getPrev(curr));
         }
 
-        List<N> path = new LinkedList<>();
-        path.add(end);
-        while(!path.get(0).equals(start)) {
-            path.add(0, distances.get(path.get(0)).getRight());
-        }
+        // there is no path
+        if(!paths.containsKey(end))
+            return Optional.empty();
 
-        return Optional.of(Pair.of(path, distances.get(end).getLeft()));
+        // retrace the path
+        List<EdgeEndpointPair<N, E>> path = new LinkedList<>();
+        N prev = end;
+        while(true) { // while start has not been encountered
+            Pair<E, N> pair = paths.get(prev);
+            if(pair == null) break;
+
+            path.addFirst(new EdgeEndpointPair<>(pair.getLeft(), prev));
+            prev = pair.getRight();
+        }
+        path.addFirst(new EdgeEndpointPair<>(null, start));
+
+        return Optional.of(path);
     }
 }

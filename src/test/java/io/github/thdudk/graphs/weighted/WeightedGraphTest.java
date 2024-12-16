@@ -1,11 +1,13 @@
 package io.github.thdudk.graphs.weighted;
 
 import io.github.thdudk.construction.WeightedGraphFactory;
+import io.github.thdudk.graphs.weighted.WeightedGraph.EdgeEndpointPair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,12 +47,23 @@ class WeightedGraphTest {
 
     @Test
     void dijkstras() {
+        BiFunction<Integer, EdgeEndpointPair<Integer, Integer>, Integer> compression =
+            (c, a) -> {
+                if(a.getEdge() == null) {
+                    if (c == null) return 0;
+                    return c;
+                }
+                if(c == null) return a.getEdge();
+                return c + a.getEdge();
+            };
+
         assertAll(
-            () -> assertEquals(Pair.of(List.of(1, 2, 3), 5d), loop.dijkstras(1, 3, a -> a.getEdge().doubleValue()).get()),
-            () -> assertEquals(Pair.of(List.of(1), 0d), loop.dijkstras(1, 1, a -> a.getEdge().doubleValue()).get()),
-            () -> assertEquals(Optional.empty(), disconnected.dijkstras(1, 2, a -> a.getEdge().doubleValue())),
-            () -> assertThrows(IllegalArgumentException.class, () -> disconnected.dijkstras(1, 100, a -> a.getEdge().doubleValue())),
-            () -> assertThrows(IllegalArgumentException.class, () -> disconnected.dijkstras(-100, 100, a -> a.getEdge().doubleValue()))
+            () -> assertEquals(List.of(new EdgeEndpointPair<>(null, 1), new EdgeEndpointPair<>(2, 2), new EdgeEndpointPair<>(3, 3)),
+                loop.dijkstras(1, 3, compression).orElseThrow()),
+            () -> assertEquals(List.of(new EdgeEndpointPair<>(null, 1)), loop.dijkstras(1, 1, compression).orElseThrow()),
+            () -> assertEquals(Optional.empty(), disconnected.dijkstras(1, 2, compression)),
+            () -> assertThrows(IllegalArgumentException.class, () -> disconnected.dijkstras(1, 100, compression)),
+            () -> assertThrows(IllegalArgumentException.class, () -> disconnected.dijkstras(-100, 100, compression))
         );
     }
 }
