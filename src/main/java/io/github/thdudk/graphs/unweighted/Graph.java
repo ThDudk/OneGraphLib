@@ -92,4 +92,35 @@ public interface Graph<N> {
             path.addFirst(curr);
         }
     }
+
+    /**
+     * @param root The root node
+     * @return the longest path from {@code root} to any other node in this
+     */
+    default List<N> longestPathFrom(N root) {
+        requireContained(List.of(root), this);
+        return longestPathFrom(root, new ArrayList<>(), new HashSet<>());
+    }
+    private List<N> longestPathFrom(N curr, List<N> currPath, Set<N> visited) {
+        if(visited.contains(curr)) return currPath;
+        visited.add(curr);
+        currPath.add(curr);
+
+        List<List<N>> allPaths = new ArrayList<>();
+        allPaths.add(currPath);
+
+        for(N neighbour : getNeighbours(curr)) {
+            allPaths.add(longestPathFrom(neighbour, currPath, visited));
+        }
+
+        return allPaths.stream().reduce(
+            (a, b) -> (a.size() > b.size()) ? a : b).orElseThrow();
+    }
+    /**
+     * @param anchor node in the desired subgraph to avoid issues with disconnected graphs
+     * @return the longest path spanning this
+     */
+    default List<N> longestSpanningPath(N anchor) {
+        return longestPathFrom(longestPathFrom(anchor).getLast());
+    }
 }

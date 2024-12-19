@@ -31,7 +31,7 @@ public class DepthFirstIterator<N> implements Iterator<N> {
         // add all unvisited neighbors of curr to the stack
         stack.addAll(graph.getNeighbours(curr)
             .stream().filter(a -> !visited.contains(a))
-            .collect(Collectors.toList()));
+            .toList());
 
         return curr;
     }

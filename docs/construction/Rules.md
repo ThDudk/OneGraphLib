@@ -28,5 +28,5 @@ Graph graph = Graph.newFactory()
     .chain(1, 2, 3, 4, 5)
     .build();
 
-graph.shortestWeightedPath(node1, node2)
+graph.shortestWeightedPath(node1, node2);
 ```

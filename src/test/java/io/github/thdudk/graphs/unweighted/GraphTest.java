@@ -8,6 +8,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,6 +63,29 @@ class GraphTest {
             () -> assertThrows(RuntimeException.class, () -> singleNode.shortestPath(1, 0)),
             () -> assertThrows(RuntimeException.class, () -> singleNode.shortestPath(0, 2)),
             () -> assertEquals(List.of(1, 6, 4), complex.shortestPath(1, 4).orElse(List.of()))
+        );
+    }
+
+    @Test
+    void longestPathFrom() {
+        assertAll(
+            () -> assertEquals(List.of(1), singleNode.longestPathFrom(1)),
+            () -> assertEquals(List.of(1, 2, 3, 4), loop.longestPathFrom(1))
+        );
+    }
+    @Test
+    void longestPathFromComplex() {
+        List<Integer> path = complex.longestPathFrom(1);
+        assertAll(
+            () -> assertEquals(6, path.size()),
+            () -> assertEquals(6, new HashSet<>(path).size()) // no repeats
+        );
+    }
+
+    @Test
+    void longestSpanningPath() {
+        assertAll(
+            () -> assertEquals(6, complex.longestSpanningPath(5).size()) // anchor should be allowed to be any node in the graph
         );
     }
 }

@@ -71,6 +71,7 @@ public class DijkstraIterator<N, E, C> implements Iterator<N> {
     }
     public Pair<E, N> getPrev(N node) {
         if(weights.get(node) == null) return null;
+
         return Pair.of(weights.get(node).getMiddle(), weights.get(node).getRight());
     }
 }
