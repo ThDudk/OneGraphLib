@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="OneGraphLib:jar">
+  <artifact type="jar" build-on-make="true" name="OneGraphLib:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/OneGraphLib_jar</output-path>
     <root id="archive" name="OneGraphLib.jar">
       <element id="module-output" name="OneGraphLib.main" />

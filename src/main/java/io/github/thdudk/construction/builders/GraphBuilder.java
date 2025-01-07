@@ -30,5 +30,15 @@ public interface GraphBuilder<N> {
         }
         return this;
     }
+
+    GraphBuilder<N> removeNode(N node);
+
     Graph<N> build();
+
+    static <N> GraphBuilder<N> of() {
+        return new GraphBuilderImpl<>();
+    }
+    static <N> GraphBuilder<N> of(Graph<N> graph) {
+        return new GraphBuilderImpl<>(graph);
+    }
 }

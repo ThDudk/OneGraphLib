@@ -1,9 +1,14 @@
 package io.github.thdudk.graphs.weighted;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.github.thdudk.construction.builders.GraphBuilder;
+import io.github.thdudk.construction.builders.WeightedGraphBuilder;
 import io.github.thdudk.graphs.unweighted.Graph;
+import io.github.thdudk.iterators.DepthFirstIterator;
 import io.github.thdudk.iterators.DijkstraIterator;
+import lombok.EqualsAndHashCode;
 import lombok.Value;
+import lombok.val;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
@@ -11,6 +16,7 @@ import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static io.github.thdudk.graphs.GraphValidator.requireContained;
 
@@ -31,12 +37,32 @@ public interface WeightedGraph<N, E> extends Graph<N> {
         N endpoint;
     }
 
+    @Override
+    default WeightedGraph<N, E> filter(Predicate<N> predicate) {
+        WeightedGraphBuilder<N, E> builder = WeightedGraphBuilder.of(this);
+        // remove all nodes that do not meet the predicate
+        for(N node : getNodes())
+            if(!predicate.test(node))
+                builder.removeNode(node);
+
+        return builder.build();
+    }
+
     /**
      * @param root The node to get all the edges extending from
      * @return A set of pairs containing the edges extending from root and their corresponding endpoints
      * @throws IllegalArgumentException If root is not contained in this
      */
     Set<EdgeEndpointPair<N, E>> getEdges(N root);
+    default Optional<E> getEdgeBetween(N start, N end) {
+        requireContained(List.of(start, end), this);
+
+        for(EdgeEndpointPair<N, E> edgePair : getEdges(start)) {
+            if(edgePair.endpoint.equals(end))
+                return Optional.of(edgePair.getEdge());
+        }
+        return Optional.empty();
+    }
     @JsonValue
     default Map<N, Set<EdgeEndpointPair<N, E>>> getWeightedAdjacencyList() {
         Map<N, Set<EdgeEndpointPair<N, E>>> map = new HashMap<>();
@@ -55,6 +81,41 @@ public interface WeightedGraph<N, E> extends Graph<N> {
     default boolean hasEdge(N root, E edge, N endpoint) {
         requireContained(List.of(root, endpoint), this);
         return getEdges(root).contains(new EdgeEndpointPair<>(edge, endpoint));
+    }
+    @Override
+    default WeightedGraph<N, E> getDisconnectedGraph(N anchor) {
+        Set<N> visited = new HashSet<>();
+
+        val iterator = new DepthFirstIterator<>(this, anchor);
+
+        // find all nodes in the disconnected graph
+        while(iterator.hasNext())
+            visited.add(iterator.next());
+
+        // remove all nodes not in the disconnected graph
+        WeightedGraphBuilder<N, E> builder = WeightedGraphBuilder.of(this);
+        for(N node : getNodes())
+            if(!visited.contains(node))
+                builder.removeNode(node);
+
+        return builder.build();
+    }
+    /// note includes graphs that seem disconnected from within in directed graphs.
+    @Override
+    default Set<WeightedGraph<N, E>> getAllDisconnectedGraphs() {
+        Set<WeightedGraph<N, E>> disconnectedGraphs = new HashSet<>();
+        Set<N> visited = new HashSet<>();
+
+        for(N node : getNodes()) {
+            if(visited.contains(node)) continue;
+
+            WeightedGraph<N, E> disconnectedGraph = getDisconnectedGraph(node);
+            disconnectedGraphs.add(disconnectedGraph);
+
+            // add all visited nodes
+            visited.addAll(disconnectedGraph.getNodes());
+        }
+        return disconnectedGraphs;
     }
 
     // TODO add a shortest path algorithm that supports negative weights

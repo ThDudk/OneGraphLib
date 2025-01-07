@@ -1,6 +1,6 @@
 package io.github.thdudk.construction.builders;
 
-import io.github.thdudk.construction.restrictions.UnweightedGraphRestriction;
+import io.github.thdudk.construction.restrictions.GraphRestriction;
 import io.github.thdudk.graphs.unweighted.AdjacencyListGraphImpl;
 import io.github.thdudk.graphs.unweighted.Graph;
 import lombok.AllArgsConstructor;
@@ -11,10 +11,20 @@ import java.util.*;
 @AllArgsConstructor
 public final class GraphBuilderImpl<N> implements GraphBuilder<N> {
     private final Map<N, Set<N>> adjacencyList = new HashMap<>();
-    private final Set<UnweightedGraphRestriction<N>> restrictions;
+    private final Set<GraphRestriction<N>> restrictions;
 
     public GraphBuilderImpl() {
         restrictions = Collections.emptySet();
+    }
+    public GraphBuilderImpl(Graph<N> graph) {
+        this();
+        // create a builder with all the given graph's nodes and neighbors
+        for(N node : graph.getNodes()) {
+            addNode(node);
+            for(N neighbor : graph.getOutNeighbours(node)) {
+                addOutNeighbor(node, neighbor);
+            }
+        }
     }
 
     /**
@@ -24,8 +34,6 @@ public final class GraphBuilderImpl<N> implements GraphBuilder<N> {
      */
     @Override
     public GraphBuilder<N> addNode(N node) {
-        for(val restriction : restrictions) restriction.onNodeAdded(node);
-
         if(!adjacencyList.containsKey(node)) adjacencyList.put(node, new HashSet<>());
         return this;
     }
@@ -33,8 +41,16 @@ public final class GraphBuilderImpl<N> implements GraphBuilder<N> {
     @Override
     public GraphBuilder<N> addOutNeighbor(N root, N neighbor) {
         addNode(root).addNode(neighbor);
-        for(val restriction : restrictions) restriction.onOutNeighborAdded(root, neighbor);
         adjacencyList.get(root).add(neighbor);
+        return this;
+    }
+
+    @Override
+    public GraphBuilder<N> removeNode(N node) {
+        adjacencyList.remove(node);
+        for(Set<N> neighbours : adjacencyList.values()) {
+            neighbours.remove(node);
+        }
         return this;
     }
 
@@ -44,8 +60,12 @@ public final class GraphBuilderImpl<N> implements GraphBuilder<N> {
      */
     @Override
     public Graph<N> build() {
-        for(val restriction : restrictions) restriction.onBuild();
+        Graph<N> graph = new AdjacencyListGraphImpl<>(adjacencyList);
 
-        return new AdjacencyListGraphImpl<>(adjacencyList);
+        // throws an exception if a restriction is not met
+        for(val restriction : restrictions)
+            restriction.onBuild(graph);
+
+        return graph;
     }
 }

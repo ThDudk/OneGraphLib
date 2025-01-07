@@ -1,5 +1,6 @@
 package io.github.thdudk.construction.builders;
 
+import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.graphs.weighted.WeightedGraph;
 
 public interface WeightedGraphBuilder<N, E> extends GraphBuilder<N> {
@@ -15,4 +16,11 @@ public interface WeightedGraphBuilder<N, E> extends GraphBuilder<N> {
         return this;
     };
     WeightedGraph<N, E> build();
+
+    static <N, E> WeightedGraphBuilder<N, E> of() {
+        return new WeightedGraphBuilderImpl<>();
+    }
+    static <N, E> WeightedGraphBuilder<N, E> of(WeightedGraph<N, E> graph) {
+        return new WeightedGraphBuilderImpl<>(graph);
+    }
 }

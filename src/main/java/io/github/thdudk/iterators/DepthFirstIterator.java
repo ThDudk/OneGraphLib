@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Stack;
-import java.util.stream.Collectors;
 
 public class DepthFirstIterator<N> implements Iterator<N> {
     private final Graph<N> graph;
@@ -29,7 +28,7 @@ public class DepthFirstIterator<N> implements Iterator<N> {
         visited.add(curr);
 
         // add all unvisited neighbors of curr to the stack
-        stack.addAll(graph.getNeighbours(curr)
+        stack.addAll(graph.getOutNeighbours(curr)
             .stream().filter(a -> !visited.contains(a))
             .toList());
 

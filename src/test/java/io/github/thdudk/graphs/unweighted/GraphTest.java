@@ -3,11 +3,8 @@ package io.github.thdudk.graphs.unweighted;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.thdudk.construction.GraphFactory;
-import io.github.thdudk.iterators.BreadthFirstIterator;
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -41,18 +38,6 @@ class GraphTest {
     }
 
     @Test
-    void isNeighbor() {
-        assertAll(
-            () -> assertFalse(singleNode.isNeighbor(1, 1)),
-            () -> assertThrows(NullPointerException.class, () -> singleNode.isNeighbor(1, null)),
-            () -> assertTrue(loop.isNeighbor(1, 2)),
-            () -> assertFalse(loop.isNeighbor(2, 1)),
-            () -> assertThrows(RuntimeException.class, () -> singleNode.isNeighbor(1, 0)),
-            () -> assertThrows(RuntimeException.class, () -> singleNode.isNeighbor(0, 2))
-        );
-    }
-
-    @Test
     void shortestPath() {
         System.out.println(complex);
 
@@ -63,29 +48,6 @@ class GraphTest {
             () -> assertThrows(RuntimeException.class, () -> singleNode.shortestPath(1, 0)),
             () -> assertThrows(RuntimeException.class, () -> singleNode.shortestPath(0, 2)),
             () -> assertEquals(List.of(1, 6, 4), complex.shortestPath(1, 4).orElse(List.of()))
-        );
-    }
-
-    @Test
-    void longestPathFrom() {
-        assertAll(
-            () -> assertEquals(List.of(1), singleNode.longestPathFrom(1)),
-            () -> assertEquals(List.of(1, 2, 3, 4), loop.longestPathFrom(1))
-        );
-    }
-    @Test
-    void longestPathFromComplex() {
-        List<Integer> path = complex.longestPathFrom(1);
-        assertAll(
-            () -> assertEquals(6, path.size()),
-            () -> assertEquals(6, new HashSet<>(path).size()) // no repeats
-        );
-    }
-
-    @Test
-    void longestSpanningPath() {
-        assertAll(
-            () -> assertEquals(6, complex.longestSpanningPath(5).size()) // anchor should be allowed to be any node in the graph
         );
     }
 }

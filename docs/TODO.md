@@ -1,3 +1,12 @@
 # TODO
 - `@Contained` annotation for node inputs
 - Better null value handling
+- Immutable graph restrictions for more efficient algorithms
+- Path Graph (which just has a start and end)
+- Custom Exception for Restrictions
+- Fix the tests 
+- Equals and Hashcode as interface methods?
+- Stream functions for edges and nodes
+- Graph merging
+- less reliance on pairs
+- Custom classes for graph algorithms

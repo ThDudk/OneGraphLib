@@ -5,6 +5,7 @@ import io.github.thdudk.graphs.GraphValidator;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +24,7 @@ public class AdjacencyListGraphImpl<N> implements Graph<N> {
         return Set.copyOf(adjacencyList.keySet());
     }
     @Override
-    public Set<N> getNeighbours(N root) {
+    public Set<N> getOutNeighbours(N root) {
         GraphValidator.requireContained(List.of(root), this);
         return Set.copyOf(adjacencyList.get(root));
     }

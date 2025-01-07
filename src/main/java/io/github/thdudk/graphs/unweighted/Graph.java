@@ -1,11 +1,13 @@
 package io.github.thdudk.graphs.unweighted;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.github.thdudk.construction.builders.GraphBuilder;
 import io.github.thdudk.iterators.BreadthFirstIterator;
+import io.github.thdudk.iterators.DepthFirstIterator;
+import lombok.val;
 
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import static io.github.thdudk.graphs.GraphValidator.requireContained;
 
@@ -24,11 +26,53 @@ public interface Graph<N> {
      * @return all out neighbors of root
      * @throws IllegalArgumentException If root is not contained in this
      */
-    Set<N> getNeighbours(N root);
+    Set<N> getOutNeighbours(N root);
+    default Set<N> getInNeighbours(N root) {
+        Set<N> inNeighbours = new HashSet<>();
+
+        // find all nodes with out-neighbours towards root (aka root's in neighbours)
+        for(N node : getNodes()) {
+            if(node.equals(root)) continue;
+
+            for(N neighbour : getOutNeighbours(node)) {
+                if(neighbour.equals(root)) {
+                    inNeighbours.add(node);
+                    break;
+                }
+            }
+        }
+        return inNeighbours;
+    }
+    default Set<N> getNeighbours(N root) {
+        Set<N> neighbors = new HashSet<>(getOutNeighbours(root));
+        neighbors.addAll(getInNeighbours(root));
+        return neighbors;
+    }
+
+    default int getOutDegree(N root) {
+        return getOutNeighbours(root).size();
+    }
+    default int getInDegree(N root) {
+        return getInNeighbours(root).size();
+    }
+    default int getDegree(N root) {
+        return getNeighbours(root).size();
+    }
+
     default Map<N, Set<N>> getUnweightedAdjacencyList() {
         Map<N, Set<N>> map = new HashMap<>();
-        for(N node : getNodes()) map.put(node, getNeighbours(node));
+        for(N node : getNodes()) map.put(node, getOutNeighbours(node));
         return map;
+    }
+
+    default Graph<N> filter(Predicate<N> predicate) {
+        GraphBuilder<N> builder = GraphBuilder.of(this);
+        // remove all nodes that do not meet the predicate
+        for(N node : getNodes())
+            if(!predicate.test(node))
+                builder.removeNode(node);
+
+        return builder.build();
     }
 
     /**
@@ -38,16 +82,6 @@ public interface Graph<N> {
     default boolean hasNode(N node) {
         return getNodes().contains(node);
     }
-    /**
-     * @param root The root node
-     * @param neighbor The possible neighbor
-     * @return true if neighbor is an out neighbor from root
-     * @throws IllegalArgumentException If root or neighbor are not contained in this
-     */
-    default boolean isNeighbor(N root, N neighbor) {
-        requireContained(List.of(root, neighbor), this);
-        return getNeighbours(root).contains(neighbor);
-    }
     default Optional<N> findNode(Predicate<N> predicate) {
         for(N node : getNodes()) {
             if(predicate.test(node)) return Optional.of(node);
@@ -55,6 +89,7 @@ public interface Graph<N> {
         return Optional.empty();
     }
 
+    // Algorithms
     /**
      * Finds the shortest path from start to end using the Breadth First Search algorithm.
      * <p>A path with the least number of edge traversals possible will always be returned, but there are likely other possible paths of equal distance.
@@ -75,7 +110,7 @@ public interface Graph<N> {
             if (!iterator.hasNext()) return Optional.empty();
 
             N curr = iterator.next();
-            for (N neighbour : getNeighbours(curr))
+            for (N neighbour : getOutNeighbours(curr))
                 if (!shortestPathTo.containsKey(neighbour))
                     shortestPathTo.put(neighbour, curr);
         }
@@ -93,34 +128,64 @@ public interface Graph<N> {
         }
     }
 
+    default Graph<N> getDisconnectedGraph(N anchor) {
+        Set<N> visited = new HashSet<>();
+
+        val iterator = new DepthFirstIterator<>(this, anchor);
+
+        // find all nodes in the disconnected graph
+        while(iterator.hasNext())
+            visited.add(iterator.next());
+
+        // remove all nodes not in the disconnected graph
+        GraphBuilder<N> builder = GraphBuilder.of(this);
+        for(N node : getNodes())
+            if(!visited.contains(node))
+                builder.removeNode(node);
+
+        return builder.build();
+    }
+    /// note includes graphs that seem disconnected from within in directed graphs.
+    default Set<? extends Graph<N>> getAllDisconnectedGraphs() {
+        Set<Graph<N>> disconnectedGraphs = new HashSet<>();
+        Set<N> visited = new HashSet<>();
+
+        for(N node : getNodes()) {
+            if(visited.contains(node)) continue;
+
+            Graph<N> disconnectedGraph = getDisconnectedGraph(node);
+            disconnectedGraphs.add(disconnectedGraph);
+
+            // add all visited nodes
+            visited.addAll(disconnectedGraph.getNodes());
+        }
+        return disconnectedGraphs;
+    }
+
     /**
      * @param root The root node
      * @return the longest path from {@code root} to any other node in this
      */
-    default List<N> longestPathFrom(N root) {
+    default Set<List<N>> allFullyExtendedPathsFrom(N root) {
         requireContained(List.of(root), this);
-        return longestPathFrom(root, new ArrayList<>(), new HashSet<>());
+        return allFullyExtendedPathsFrom(root, new ArrayList<>(), new HashSet<>());
     }
-    private List<N> longestPathFrom(N curr, List<N> currPath, Set<N> visited) {
-        if(visited.contains(curr)) return currPath;
-        visited.add(curr);
-        currPath.add(curr);
+    private Set<List<N>> allFullyExtendedPathsFrom(N curr, List<N> currPath, Set<N> visited) {
+        Set<N> newVisited = new HashSet<>(visited);
+        List<N> newCurrPath = new ArrayList<>(currPath);
 
-        List<List<N>> allPaths = new ArrayList<>();
-        allPaths.add(currPath);
+        newVisited.add(curr);
+        newCurrPath.add(curr);
 
-        for(N neighbour : getNeighbours(curr)) {
-            allPaths.add(longestPathFrom(neighbour, currPath, visited));
-        }
+        Set<List<N>> allPaths = new HashSet<>();
 
-        return allPaths.stream().reduce(
-            (a, b) -> (a.size() > b.size()) ? a : b).orElseThrow();
-    }
-    /**
-     * @param anchor node in the desired subgraph to avoid issues with disconnected graphs
-     * @return the longest path spanning this
-     */
-    default List<N> longestSpanningPath(N anchor) {
-        return longestPathFrom(longestPathFrom(anchor).getLast());
+        List<N> validNeighbours = getOutNeighbours(curr).stream().filter(a -> !newVisited.contains(a)).toList();
+        if(validNeighbours.isEmpty()) return Set.of(newCurrPath); // this is the farthest node in this path from the root
+
+        for(N neighbour : validNeighbours)
+            allPaths.addAll(allFullyExtendedPathsFrom(neighbour, newCurrPath, newVisited));
+
+        // return the longest path
+        return allPaths;
     }
 }

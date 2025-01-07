@@ -2,8 +2,8 @@ package io.github.thdudk.construction;
 
 import io.github.thdudk.construction.builders.WeightedGraphBuilder;
 import io.github.thdudk.construction.builders.WeightedGraphBuilderImpl;
+import io.github.thdudk.construction.restrictions.GraphRestriction;
 import io.github.thdudk.construction.restrictions.UndirectedRestriction;
-import io.github.thdudk.construction.restrictions.WeightedGraphRestriction;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,13 +13,13 @@ import java.util.Set;
  * @param <N> Type of the nodes contained in the to be built graph
  */
 public class WeightedGraphFactory<N, E> {
-    private final Set<WeightedGraphRestriction<N, E>> restrictions = new HashSet<>();
+    private final Set<GraphRestriction<N>> restrictions = new HashSet<>();
 
     /**
      * @param restriction The restriction to add
      * @return this to allow chaining
      */
-    public WeightedGraphFactory<N, E> addRestriction(WeightedGraphRestriction<N, E> restriction) {
+    public WeightedGraphFactory<N, E> addRestriction(GraphRestriction<N> restriction) {
         restrictions.add(restriction);
         return this;
     }
