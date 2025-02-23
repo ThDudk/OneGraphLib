@@ -1,22 +1,33 @@
 package io.github.thdudk.graphs.unweighted;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.thdudk.AbstractRestrictedGraph;
 import io.github.thdudk.graphs.GraphValidator;
+import io.github.thdudk.restrictions.GraphRestriction;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@EqualsAndHashCode
-@ToString
-public class AdjacencyListGraphImpl<N> implements Graph<N> {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class AdjacencyListGraphImpl<N> extends AbstractRestrictedGraph<N> implements Graph<N> {
     private final Map<N, Set<N>> adjacencyList;
 
-    public AdjacencyListGraphImpl(@JsonProperty("adjacencyList") Map<N, Set<N>> adjacencyList) {
+    @JsonCreator
+    public AdjacencyListGraphImpl(
+        @JsonProperty("restrictions") Collection<GraphRestriction<N>> restrictions,
+        @JsonProperty("unweightedAdjacencyList") Map<N, Set<N>> adjacencyList
+    ) {
         this.adjacencyList = adjacencyList;
+
+        for(GraphRestriction<N> restriction : restrictions) {
+            addRestriction(restriction);
+        }
     }
 
     @Override
@@ -24,7 +35,7 @@ public class AdjacencyListGraphImpl<N> implements Graph<N> {
         return Set.copyOf(adjacencyList.keySet());
     }
     @Override
-    public Set<N> getOutNeighbours(N root) {
+    public Set<N> getNeighbours(N root) {
         GraphValidator.requireContained(List.of(root), this);
         return Set.copyOf(adjacencyList.get(root));
     }

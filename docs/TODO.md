@@ -1,12 +1,19 @@
 # TODO
-- `@Contained` annotation for node inputs
-- Better null value handling
-- Immutable graph restrictions for more efficient algorithms
-- Path Graph (which just has a start and end)
-- Custom Exception for Restrictions
-- Fix the tests 
-- Equals and Hashcode as interface methods?
-- Stream functions for edges and nodes
-- Graph merging
-- less reliance on pairs
-- Custom classes for graph algorithms
+
+- [x] Immutable graph restrictions
+- [ ] improved Graph serialization
+- [ ] Improved Iterators
+- [ ] Separate Classes for graph algorithms
+- [ ] Graph merging
+- [ ] Type casting
+  - Graph to builder
+  - Weighted to unweighted
+- [ ] Path Graphs
+- [ ] Removal of apache Commons-Lang
+- [ ] @Contained annotation for inputs
+  - [ ] Nodes
+  - [ ] Edges
+
+## Work on when possible
+- tests
+- Javadoc where needed

@@ -5,6 +5,7 @@ import io.github.thdudk.graphs.unweighted.Graph;
 import java.util.Collection;
 import java.util.List;
 
+// TODO replace with annotation
 /**
  * Simple class that throws detailed exceptions when certain conditions are not being held
  */
@@ -15,7 +16,7 @@ public class GraphValidator {
      * @throws IllegalArgumentException If any of the provided nodes are not contained in this
      */
     public static <N> void requireContained(Collection<N> nodes, Graph<N> graph) {
-        List<N> notContained = nodes.stream().filter(a -> a == null || !graph.hasNode(a)).toList();
+        List<N> notContained = nodes.stream().filter(a -> a == null || !graph.getNodes().contains(a)).toList();
 
         if(notContained.isEmpty()) return;
         throw new IllegalArgumentException("Given nodes must be within the graph. Illegal nodes: " + notContained);
