@@ -2,13 +2,10 @@
 
 - [x] Immutable graph restrictions
 - [ ] improved Graph serialization
-- [ ] Improved Iterators
-- [ ] Separate Classes for graph algorithms
-- [ ] Graph merging
+- [x] Improved Iterators
 - [ ] Type casting
   - Graph to builder
   - Weighted to unweighted
-- [ ] Path Graphs
 - [ ] Removal of apache Commons-Lang
 - [ ] @Contained annotation for inputs
   - [ ] Nodes
