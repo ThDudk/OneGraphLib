@@ -4,7 +4,7 @@
 - [ ] improved Graph serialization
 - [x] Improved Iterators
 - [x] Type casting
-- [ ] Removal of apache Commons-Lang
+- [x] Removal of apache Commons-Lang
 - [ ] @Contained annotation for inputs
   - [ ] Nodes
   - [ ] Edges
