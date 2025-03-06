@@ -3,9 +3,7 @@
 - [x] Immutable graph restrictions
 - [ ] improved Graph serialization
 - [x] Improved Iterators
-- [ ] Type casting
-  - Graph to builder
-  - Weighted to unweighted
+- [x] Type casting
 - [ ] Removal of apache Commons-Lang
 - [ ] @Contained annotation for inputs
   - [ ] Nodes

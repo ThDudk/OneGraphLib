@@ -18,4 +18,9 @@ public interface GraphBuilder<N> extends RestrictedGraph<N> {
         addDirEdge(node2, node1);
         return this;
     }
+
+    static <N> GraphBuilder<N> of(Graph<N> graph) {
+        return new GraphBuilderImpl<>(graph);
+    }
+
 }

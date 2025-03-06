@@ -1,6 +1,7 @@
 package io.github.thdudk.builders;
 
 import io.github.thdudk.WeightedRestrictedGraph;
+import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.graphs.weighted.WeightedGraph;
 
 import java.util.Set;
@@ -18,4 +19,8 @@ public interface WeightedGraphBuilder<N, E> extends WeightedRestrictedGraph<N, E
         addDirEdge(node2, edge, node1);
         return this;
     };
+
+    static <N, E> WeightedGraphBuilder<N, E> of(WeightedGraph<N, E> graph) {
+        return new WeightedGraphBuilderImpl<>(graph);
+    }
 }

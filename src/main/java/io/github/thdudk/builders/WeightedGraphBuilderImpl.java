@@ -4,23 +4,20 @@ import io.github.thdudk.AbstractWeightedRestrictedGraph;
 import io.github.thdudk.graphs.weighted.AdjacencyListWeightedGraphImpl;
 import io.github.thdudk.graphs.weighted.WeightedGraph;
 import io.github.thdudk.graphs.weighted.WeightedGraph.EdgeEndpointPair;
+import lombok.NoArgsConstructor;
 import lombok.val;
 
 import java.util.*;
 
+@NoArgsConstructor
 public final class WeightedGraphBuilderImpl<N, E> extends AbstractWeightedRestrictedGraph<N, E> implements WeightedGraphBuilder<N, E> {
     private final Map<N, Set<EdgeEndpointPair<N, E>>> adjacencyList = new HashMap<>();
 
-    public WeightedGraphBuilderImpl() {
-        super();
-    }
     public WeightedGraphBuilderImpl(WeightedGraph<N, E> graph) {
-        this();
-
         for(N node : graph.getNodes()) {
             addNode(node);
             for (N neighbour : graph.getNeighbours(node)) {
-                addDirEdge(node, graph.getEdgeBetween(node, neighbour).orElseThrow(), neighbour);
+                addDirEdge(node, graph.getEdgeBetween(node, neighbour), neighbour);
             }
         }
     }

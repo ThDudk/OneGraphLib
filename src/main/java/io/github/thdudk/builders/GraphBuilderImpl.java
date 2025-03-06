@@ -3,18 +3,17 @@ package io.github.thdudk.builders;
 import io.github.thdudk.AbstractRestrictedGraph;
 import io.github.thdudk.graphs.unweighted.AdjacencyListGraphImpl;
 import io.github.thdudk.graphs.unweighted.Graph;
-import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.val;
 
 import java.util.*;
 
-@AllArgsConstructor
+@NoArgsConstructor
 public final class GraphBuilderImpl<N> extends AbstractRestrictedGraph<N> implements GraphBuilder<N> {
     private final Map<N, Set<N>> adjacencyList = new HashMap<>();
 
     public GraphBuilderImpl(Graph<N> graph) {
-        this();
-        // create a builder with all the given graph's nodes and neighbors
+        // create a builder with all the given graph's nodes and neighbours
         for(N node : graph.getNodes()) {
             addNode(node);
             for(N neighbor : graph.getNeighbours(node)) {

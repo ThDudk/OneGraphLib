@@ -26,7 +26,7 @@ class GraphBuilderTest {
     // -- functionality tests --
     @ParameterizedTest
     @MethodSource("implementationsToTest")
-    void recreateCSESShortestRoutesIG1() throws IOException {
+    void recreateCSESShortestRoutesIG1() {
         // nodes are implicitly created
         Graph<Integer> graph = new GraphBuilderImpl<Integer>()
             .addDirEdge(1, 2)

@@ -5,6 +5,7 @@ import io.github.thdudk.graphs.GraphValidator;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import lombok.Value;
 
 import java.util.List;
 import java.util.Map;

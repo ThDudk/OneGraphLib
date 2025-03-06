@@ -1,6 +1,7 @@
 package io.github.thdudk.graphs.weighted;
 
 import io.github.thdudk.WeightedRestrictedGraph;
+import io.github.thdudk.builders.GraphBuilder;
 import io.github.thdudk.graphs.unweighted.Graph;
 import lombok.Value;
 
@@ -13,7 +14,6 @@ import java.util.Set;
  * @param <E> Type of the edges contained in the graph
  */
 public interface WeightedGraph<N, E> extends Graph<N>, WeightedRestrictedGraph<N, E> {
-    // TODO remove
     /**
      * Pair of an edge and it's endpoint
      * @param <N> Type of the Endpoint
@@ -26,7 +26,10 @@ public interface WeightedGraph<N, E> extends Graph<N>, WeightedRestrictedGraph<N
     }
 
     Set<E> getEdgesBetween(N start, N end);
-    default Optional<E> getEdgeBetween(N start, N end) {
-        return getEdgesBetween(start, end).stream().findAny();
+    default E getEdgeBetween(N start, N end) throws IllegalArgumentException {
+        return getEdgesBetween(start, end)
+            .stream()
+            .findAny()
+            .orElseThrow(() -> new IllegalArgumentException("Cannot find edge between nodes that are not neighbours"));
     }
 }
