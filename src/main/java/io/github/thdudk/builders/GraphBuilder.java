@@ -19,6 +19,8 @@ public interface GraphBuilder<N> extends RestrictedGraph<N> {
         return this;
     }
 
+    /// Constructs a builder from graph
+    /// @return the created builder
     static <N> GraphBuilder<N> of(Graph<N> graph) {
         return new GraphBuilderImpl<>(graph);
     }

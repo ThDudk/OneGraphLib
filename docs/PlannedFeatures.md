@@ -1,15 +1,7 @@
-# Possible Future Features
+# High Priority
+* Graph Transformations
+* Graph algorithms
 
-## High Priority
+# Medium Priority
 
-- Better Exceptions
-- Path Graph (which just has a start and end)
-
-## Medium Priority
-
-- Better filtering and sub-graphing methods
-
-## Low Priority
-
-- Better null value handling
-- Concurrent GraphBuilder validation
+# Low Priority

@@ -7,7 +7,6 @@ import io.github.thdudk.TestGraphs;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -65,7 +64,7 @@ class GraphTest {
 
     // -- Serialization tests --
     @Test
-    void simpleDataSerialization() throws JsonProcessingException {
+    void PrimitiveDataSerialization() throws JsonProcessingException {
         Graph<Integer> graph = TestGraphs.getCSESShortestRoutesIGraphNum(1);
 
         ObjectMapper mapper = new ObjectMapper();
@@ -78,10 +77,9 @@ class GraphTest {
 
         assertEquals(graph, deserialized);
     }
-
     @ParameterizedTest
     @MethodSource("serializationTimeTrialGraphs")
-    void simpleDataSerializationTimed(Graph<Integer> graph) throws JsonProcessingException {
+    void primitiveDataSerializationTimed(Graph<Integer> graph) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
 
         // serialize the graph
@@ -97,7 +95,7 @@ class GraphTest {
         double deserializationTime = (deserializationEnd - deserializationStart) / 10e+7; // convert to ms
 
         // report results
-        System.out.println("Trial: nodes: " + graph.getNodes().size() + ", edges: " + graph.numDirEdges() + ", serialization time (ms): " + serializationTime + ", deserialization time (ms): " + deserializationTime);
+        System.out.println("Trial: nodes: " + graph.getNodes().size() + ", serialization time (ms): " + serializationTime + ", deserialization time (ms): " + deserializationTime);
     }
 
     public static Collection<Graph<Integer>> serializationTimeTrialGraphs() {

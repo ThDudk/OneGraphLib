@@ -16,31 +16,17 @@ import java.util.Set;
  */
 @JsonDeserialize(as = AdjacencyListGraphImpl.class)
 public interface Graph<N> extends RestrictedGraph<N> {
-    /**
-     * @return a set of all nodes in this
-     */
     @JsonIgnore
     Set<N> getNodes();
-    /**
-     * @param root The root node to get the neighbors of
-     * @return all out neighbors of root
-     * @throws IllegalArgumentException If root is not contained in this
-     */
+    /// @return all out neighbors of root
+    /// @throws IllegalArgumentException If root is not contained in this
     Set<N> getNeighbours(N root);
 
-    default int numDirEdges() {
-        int sum = 0;
-        for(N node : getNodes()) {
-            sum += getDegree(node);
-        }
-        return sum;
-    }
-
-    /**
-     * Default implementation should be overridden if possible
-     * @param root
-     * @return
-     */
+    /// Returns all nodes with an edge going into root.
+    /// This includes undirected edges.
+    ///
+    /// The default implementation should be overridden if possible.
+    /// @return neighbours with edges going into root
     default Set<N> getInNeighbours(N root) {
         Set<N> nodes = new HashSet<>();
         for(N node : getNodes())
@@ -57,6 +43,7 @@ public interface Graph<N> extends RestrictedGraph<N> {
         return getInNeighbours(root).size();
     }
 
+    /// Constructs an adjacency list representing this
     default Map<N, Set<N>> getUnweightedAdjacencyList() {
         Map<N, Set<N>> map = new HashMap<>();
         for(N node : getNodes()) map.put(node, getNeighbours(node));

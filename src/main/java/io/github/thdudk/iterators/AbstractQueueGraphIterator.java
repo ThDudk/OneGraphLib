@@ -4,9 +4,11 @@ import io.github.thdudk.graphs.unweighted.Graph;
 import lombok.RequiredArgsConstructor;
 
 import java.util.HashSet;
+import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.Set;
 
+/// Iterates through a graph based on the offer order of a queue. This allows various types of queues, such as LIFO and FIFO to be used.
 @RequiredArgsConstructor
 public abstract class AbstractQueueGraphIterator<N> implements GraphIterator<N> {
     public record NodeParentPair<N>(N node, N parent) {}
@@ -32,6 +34,7 @@ public abstract class AbstractQueueGraphIterator<N> implements GraphIterator<N> 
         return !queue.isEmpty();
     }
 
+    /// removes all visited nodes from the front of the queue
     private void removeVisitedFrontNodes() {
         while(!queue.isEmpty() && visited.contains(queue.peek().node)) {
             queue.poll();
@@ -41,7 +44,7 @@ public abstract class AbstractQueueGraphIterator<N> implements GraphIterator<N> 
     @Override
     public N next() {
         removeVisitedFrontNodes(); // technically not needed as hasNext() also calls this
-        if(!hasNext()) return null;
+        if(!hasNext()) throw new NoSuchElementException();
 
         NodeParentPair<N> pair = queue.poll();
         prevParent = pair.parent; // store the parent for getParent()

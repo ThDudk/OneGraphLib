@@ -4,6 +4,7 @@ import io.github.thdudk.WeightedRestrictedGraph;
 import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.graphs.weighted.WeightedGraph;
 
+import java.util.List;
 import java.util.Set;
 
 public interface WeightedGraphBuilder<N, E> extends WeightedRestrictedGraph<N, E> {
@@ -20,6 +21,8 @@ public interface WeightedGraphBuilder<N, E> extends WeightedRestrictedGraph<N, E
         return this;
     };
 
+    /// constructs a builder from graph
+    /// @return the created builder
     static <N, E> WeightedGraphBuilder<N, E> of(WeightedGraph<N, E> graph) {
         return new WeightedGraphBuilderImpl<>(graph);
     }
