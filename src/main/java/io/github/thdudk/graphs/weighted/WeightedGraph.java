@@ -1,11 +1,9 @@
 package io.github.thdudk.graphs.weighted;
 
 import io.github.thdudk.WeightedRestrictedGraph;
-import io.github.thdudk.builders.GraphBuilder;
 import io.github.thdudk.graphs.unweighted.Graph;
 import lombok.Value;
 
-import java.util.Optional;
 import java.util.Set;
 
 /**

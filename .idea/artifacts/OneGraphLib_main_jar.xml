@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="OneGraphLib.main:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/OneGraphLib_main_jar</output-path>
+    <root id="archive" name="OneGraphLib.main.jar">
+      <element id="module-output" name="OneGraphLib.main" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.18.0/65e8ead7de5d8f7a53e296c363bea3182f21f925/jackson-core-2.18.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.18.0/8dba1f789a75fc30b59303574fe2b269afa4d3bc/jackson-databind-2.18.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.18.0/9bddcc56af9d90f902ef5dba7348102cd12b04e2/jackson-annotations-2.18.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

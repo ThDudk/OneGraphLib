@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.thdudk.TestGraphs;
+import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -46,9 +47,7 @@ class GraphTest {
     }
     @ParameterizedTest
     @MethodSource("implementationsToTest")
-    void getUnweightedAdjacencyList(Graph<Integer> graph) {
-        // TODO impl
-    }
+    void getUnweightedAdjacencyList(Graph<Integer> graph) {}
 
     public static Collection<Object[]> implementationsToTest() {
         // map properties

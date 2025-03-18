@@ -13,7 +13,7 @@ public abstract class TestGraphs {
 
     @SneakyThrows(IOException.class)
     /// @param num graph number (1-5 inclusive)
-    public static Graph<Integer> getCSESShortestRoutesIGraphNum(int num) {
+    public static Graph<Integer> getCSESShortestRoutesIGraphNum( int num) {
         return mapper.readValue(
             new FileReader("src/test/resources/jackson-serialized/cses-problem-sets/shortest-routes-I/unweighted/" + num + ".json"),
             new TypeReference<>() {}

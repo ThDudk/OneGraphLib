@@ -9,6 +9,8 @@ import java.util.Queue;
 import java.util.Set;
 
 /// Iterates through a graph based on the offer order of a queue. This allows various types of queues, such as LIFO and FIFO to be used.
+///
+/// This iterator will only call {@link Queue#offer(Object)}, {@link Queue#poll()} and {@link Queue#peek()}
 @RequiredArgsConstructor
 public abstract class AbstractQueueGraphIterator<N> implements GraphIterator<N> {
     public record NodeParentPair<N>(N node, N parent) {}
@@ -47,6 +49,7 @@ public abstract class AbstractQueueGraphIterator<N> implements GraphIterator<N> 
         if(!hasNext()) throw new NoSuchElementException();
 
         NodeParentPair<N> pair = queue.poll();
+        assert pair != null; // to satisfy the compiler
         prevParent = pair.parent; // store the parent for getParent()
         visited.add(pair.node); // mark the current node as visited
 

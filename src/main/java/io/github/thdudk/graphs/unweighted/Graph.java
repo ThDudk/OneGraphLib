@@ -3,7 +3,6 @@ package io.github.thdudk.graphs.unweighted;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.github.thdudk.RestrictedGraph;
-import lombok.EqualsAndHashCode;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,6 +15,7 @@ import java.util.Set;
  */
 @JsonDeserialize(as = AdjacencyListGraphImpl.class)
 public interface Graph<N> extends RestrictedGraph<N> {
+    // TODO check restrictions when they're being added
     @JsonIgnore
     Set<N> getNodes();
     /// @return all out neighbors of root

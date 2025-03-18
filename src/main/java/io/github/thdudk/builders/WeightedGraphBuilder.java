@@ -1,10 +1,8 @@
 package io.github.thdudk.builders;
 
 import io.github.thdudk.WeightedRestrictedGraph;
-import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.graphs.weighted.WeightedGraph;
 
-import java.util.List;
 import java.util.Set;
 
 public interface WeightedGraphBuilder<N, E> extends WeightedRestrictedGraph<N, E> {
