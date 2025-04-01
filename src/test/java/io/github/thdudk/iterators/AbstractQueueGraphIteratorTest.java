@@ -1,10 +1,8 @@
 package io.github.thdudk.iterators;
 
 import io.github.thdudk.TestGraphs;
-import io.github.thdudk.builders.GraphBuilder;
-import io.github.thdudk.builders.GraphBuilderImpl;
 import io.github.thdudk.graphs.unweighted.Graph;
-import org.junit.jupiter.api.Test;
+import io.github.thdudk.ids.NodeID;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -20,20 +18,20 @@ class AbstractQueueGraphIteratorTest {
 
     @ParameterizedTest
     @MethodSource("implementationsToTest")
-    void getParent(AbstractQueueGraphIterator<Integer> iterator) {
+    void getParent(AbstractQueueGraphIterator iterator) {
         iterator.next(); // node 1 should have been polled
         iterator.next(); // node 2 should have been polled
-        assertEquals(1, iterator.getParent());
+        assertEquals(graph.anyNodeIdWithData(1), iterator.getParent());
     }
 
     @ParameterizedTest
     @MethodSource("implementationsToTest")
-    void next(AbstractQueueGraphIterator<Integer> iterator) {
+    void next(AbstractQueueGraphIterator iterator) {
         // test that all nodes are visited exactly once
-        Set<Integer> visited = new HashSet<>();
+        Set<NodeID> visited = new HashSet<>();
 
         while(iterator.hasNext()) {
-            int node = iterator.next();
+            NodeID node = iterator.next();
             if(visited.contains(node)) fail("node visited twice"); // node has already been visited
             visited.add(node);
         }
@@ -42,10 +40,10 @@ class AbstractQueueGraphIteratorTest {
         assertEquals(graph.getNodes(), visited);
     }
 
-    public static Collection<AbstractQueueGraphIterator<Integer>> implementationsToTest() {
+    public static Collection<AbstractQueueGraphIterator> implementationsToTest() {
         return List.of(
-            new DepthFirstIterator<>(graph, 1),
-            new BreadthFirstIterator<>(graph, 1)
+            new DepthFirstIterator(graph, graph.anyNodeIdWithData(1)),
+            new BreadthFirstIterator(graph, graph.anyNodeIdWithData(1))
         );
     }
 }

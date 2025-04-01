@@ -4,10 +4,10 @@ import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.restrictions.GraphRestriction;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 public interface RestrictedGraph<N> {
-    Set<GraphRestriction<N>> getRestrictions();
+    Collection<GraphRestriction<N>> getRestrictions();
     RestrictedGraph<N> addRestriction(GraphRestriction<N> restriction);
     default RestrictedGraph<N> addAllRestrictions(Collection<GraphRestriction<N>> restrictions) {
         for(GraphRestriction<N> restriction : restrictions) {
@@ -20,10 +20,10 @@ public interface RestrictedGraph<N> {
     default boolean hasRestriction(GraphRestriction<N> restriction) {
         return getRestrictions().contains(restriction);
     }
-    default boolean isSatisfied(Graph<N> graph) {
-        for(GraphRestriction<N> restriction : getRestrictions()) {
-            if(!restriction.isSatisfied(graph)) return false;
-        }
-        return true;
+
+    default void throwIfRestrictionsNotSatisfied(Graph<N> graph) {
+        List<GraphRestriction<N>> unsatisfied = getRestrictions().stream().filter(a -> !a.isSatisfied(graph)).toList();
+
+        if(!unsatisfied.isEmpty()) throw new RuntimeException("Graph failed to satisfy restrictions: " + unsatisfied);
     }
 }

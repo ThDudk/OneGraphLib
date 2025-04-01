@@ -1,9 +1,12 @@
 package io.github.thdudk;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.thdudk.builders.DistinctDataGraphBuilder;
+import io.github.thdudk.builders.DistinctDataGraphBuilderImpl;
 import io.github.thdudk.builders.GraphBuilder;
 import io.github.thdudk.builders.GraphBuilderImpl;
 import io.github.thdudk.graphs.unweighted.Graph;
+import io.github.thdudk.ids.NodeID;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,18 +14,21 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public abstract class TestUtils {
-    // used quickly to generate jackson serialized instances of the cses shortest routes I graphs
-    public static void main(String[] args) throws IOException {
+    // used quickly to generate jackson serialized instances of the CSES Shortest Routes I graphs
+//    public static void main(String[] args) throws IOException {
 //        doTheThing(6);
-    }
+//    }
     static void doTheThing(int num) throws IOException {
         // read in graph
-        GraphBuilder<String> builder = new GraphBuilderImpl<>();
+        DistinctDataGraphBuilder<String> builder = new DistinctDataGraphBuilderImpl<>();
         BufferedReader reader = new BufferedReader(new FileReader("src/test/resources/raw/cses-problem-sets/shortest-routes-I/" + num + ".in"));
         reader.readLine();
 
+        int lineNum = 0;
         for(String[] line : reader.lines().map(a -> a.split(" ")).toList()) {
             builder.addDirEdge(line[0], line[1]);
+            if(lineNum % 10000 == 0) System.out.println("finished: " + lineNum);
+            lineNum++;
         }
         Graph<String> graph = builder.build();
 

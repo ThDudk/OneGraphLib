@@ -2,11 +2,13 @@ package io.github.thdudk.builders;
 
 import io.github.thdudk.TestGraphs;
 import io.github.thdudk.graphs.unweighted.Graph;
+import io.github.thdudk.ids.NodeID;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
@@ -24,24 +26,6 @@ class GraphBuilderTest {
     // TODO test restrictions are satisfied
 
     // -- functionality tests --
-    @ParameterizedTest
-    @MethodSource("implementationsToTest")
-    void recreateCSESShortestRoutesIG1() {
-        // nodes are implicitly created
-        Graph<Integer> graph = new GraphBuilderImpl<Integer>()
-            .addDirEdge(1, 2)
-            .addUndirEdge(2, 3)
-            .addDirEdge(3, 4).addUndirEdge(3, 5)
-            .addUndirEdge(4, 5).addDirEdge(4, 2)
-            .addDirEdge(5, 6).addDirEdge(5, 3)
-            .addDirEdge(6, 7)
-            .addUndirEdge(7, 10).addDirEdge(7, 8).addDirEdge(7, 9)
-            .addUndirEdge(8, 9).addDirEdge(8, 5)
-            .addUndirEdge(9, 10)
-            .build();
-
-        assertEquals(graph, TestGraphs.getCSESShortestRoutesIGraphNum(1));
-    }
 
     // -- basic tests --
 
@@ -49,59 +33,48 @@ class GraphBuilderTest {
     @MethodSource("implementationsToTest")
     void addNodes(GraphBuilder<Integer> builder) {
         // assert nodes are added successfully
-        builder.addNode(1).addNode(2).addNode(3);
-        assertEquals(Set.of(1, 2, 3), builder.getNodes());
-
-        // assert duplicate inputs do not produce duplicate nodes
         builder.addNode(1);
-        assertEquals(Set.of(1, 2, 3), builder.getNodes());
-    }
-    @ParameterizedTest
-    @MethodSource("implementationsToTest")
-    void removeNodes(GraphBuilder<Integer> builder) {
-        builder.addNode(1).addNode(2).addNode(3);
+        builder.addNode(2);
+        builder.addNode(3);
+        assertArrayEquals(List.of(1, 2, 3).toArray(), builder.build().getNodeDataMap().values().toArray());
 
-        // assert nodes are removed successfully
-        builder.removeNode(1).removeNode(2);
-        assertEquals(Set.of(3), builder.getNodes());
-    }
-    @ParameterizedTest
-    @MethodSource("implementationsToTest")
-    void getNodes(GraphBuilder<Integer> builder) {
-        builder.addNode(1).addNode(2).addNode(3);
-
-        assertAll(
-            () -> assertEquals(Set.of(1, 2, 3), builder.getNodes()),
-            () -> assertThrows(RuntimeException.class, () -> builder.getNodes().add(4))
-        );
+        // assert duplicate inputs are added
+        builder.addNode(1);
+        System.out.println(builder.build().getNodes());
+        assertEquals(4, builder.build().getNodes().size());
+        assertEquals(Set.of(1, 2, 3), new HashSet<>(builder.build().getNodeDataMap().values()));
     }
 
     @ParameterizedTest
     @MethodSource("implementationsToTest")
     void addDirEdge(GraphBuilder<Integer> builder) {
-        builder.addNode(1).addNode(2).addNode(3);
+        NodeID one = builder.addNode(1);
+        NodeID two = builder.addNode(2);
+        NodeID three = builder.addNode(3);
 
         // assert directed edges are added
-        builder.addDirEdge(1, 2);
-        builder.addDirEdge(2, 3);
+        builder.addDirEdge(one, two);
+        builder.addDirEdge(two, three);
         assertAll(
-            () -> assertEquals(Set.of(2), builder.build().getNeighbours(1)),
-            () -> assertEquals(Set.of(3), builder.build().getNeighbours(2)),
-            () -> assertEquals(Set.of(), builder.build().getNeighbours(3))
+            () -> assertEquals(Set.of(two), builder.build().getNeighbours(one)),
+            () -> assertEquals(Set.of(three), builder.build().getNeighbours(two)),
+            () -> assertEquals(Set.of(), builder.build().getNeighbours(three))
         );
     }
     @ParameterizedTest
     @MethodSource("implementationsToTest")
     void addUndirEdge(GraphBuilder<Integer> builder) {
-        builder.addNode(1).addNode(2).addNode(3);
+        NodeID one = builder.addNode(1);
+        NodeID two = builder.addNode(2);
+        NodeID three = builder.addNode(3);
 
         // assert directed edges are added
-        builder.addUndirEdge(1, 2);
-        builder.addUndirEdge(2, 3);
+        builder.addUndirEdge(one, two);
+        builder.addUndirEdge(two, three);
         assertAll(
-            () -> assertEquals(Set.of(2), builder.build().getNeighbours(1)),
-            () -> assertEquals(Set.of(1, 3), builder.build().getNeighbours(2)),
-            () -> assertEquals(Set.of(2), builder.build().getNeighbours(3))
+            () -> assertEquals(Set.of(two), builder.build().getNeighbours(one)),
+            () -> assertEquals(Set.of(one, three), builder.build().getNeighbours(two)),
+            () -> assertEquals(Set.of(two), builder.build().getNeighbours(three))
         );
     }
 

@@ -2,6 +2,7 @@ package io.github.thdudk.iterators;
 
 import io.github.thdudk.TestGraphs;
 import io.github.thdudk.graphs.unweighted.Graph;
+import io.github.thdudk.ids.NodeID;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -14,15 +15,15 @@ class BreadthFirstIteratorTest {
 
     @Test
     void testOrder() {
-        BreadthFirstIterator<Integer> iterator = new BreadthFirstIterator<>(graph, 3);
+        BreadthFirstIterator iterator = new BreadthFirstIterator(graph, graph.anyNodeIdWithData(3));
         iterator.next(); // read the root
 
-        Set<Integer> topLayerNexts = new HashSet<>();
+        Set<NodeID> topLayerNexts = new HashSet<>();
         topLayerNexts.add(iterator.next());
         topLayerNexts.add(iterator.next());
         topLayerNexts.add(iterator.next());
 
-        assertEquals(Set.of(2, 4, 5), topLayerNexts);
+        assertEquals(Set.of(graph.anyNodeIdWithData(2), graph.anyNodeIdWithData(4), graph.anyNodeIdWithData(5)), topLayerNexts);
     }
 
 }

@@ -2,20 +2,28 @@ package io.github.thdudk;
 
 import io.github.thdudk.restrictions.GraphRestriction;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Set;
 
 @EqualsAndHashCode
 @ToString
+@NoArgsConstructor
 public abstract class AbstractRestrictedGraph<N> implements RestrictedGraph<N> {
-    private final Set<GraphRestriction<N>> restrictions = new HashSet<>();
+    private final Collection<GraphRestriction<N>> restrictions = new HashSet<>();
+
+    public AbstractRestrictedGraph(Collection<GraphRestriction<N>> restrictions) {
+        for(GraphRestriction<N> restriction : restrictions) {
+            addRestriction(restriction);
+        }
+    }
 
     @Override
-    public Set<GraphRestriction<N>> getRestrictions() {
-        return Collections.unmodifiableSet(restrictions);
+    public Collection<GraphRestriction<N>> getRestrictions() {
+        return Collections.unmodifiableCollection(restrictions);
     }
 
     @Override

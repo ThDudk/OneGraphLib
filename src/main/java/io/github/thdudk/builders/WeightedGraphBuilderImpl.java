@@ -3,60 +3,86 @@ package io.github.thdudk.builders;
 import io.github.thdudk.AbstractWeightedRestrictedGraph;
 import io.github.thdudk.graphs.weighted.AdjacencyListWeightedGraphImpl;
 import io.github.thdudk.graphs.weighted.WeightedGraph;
-import io.github.thdudk.graphs.weighted.WeightedGraph.EdgeEndpointPair;
-import lombok.NoArgsConstructor;
-import lombok.val;
+import io.github.thdudk.ids.EdgeID;
+import io.github.thdudk.ids.IntegerNodeID;
+import io.github.thdudk.ids.LongEdgeID;
+import io.github.thdudk.ids.NodeID;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-@NoArgsConstructor
-public final class WeightedGraphBuilderImpl<N, E> extends AbstractWeightedRestrictedGraph<N, E> implements WeightedGraphBuilder<N, E> {
-    private final Map<N, Set<EdgeEndpointPair<N, E>>> adjacencyList = new HashMap<>();
+import static io.github.thdudk.graphs.weighted.WeightedGraph.EdgeEndpointPair;
 
+public class WeightedGraphBuilderImpl<N, E> extends AbstractWeightedRestrictedGraph<N, E> implements WeightedGraphBuilder<N, E> {
+    private final Map<NodeID, Set<EdgeEndpointPair>> adjacencyList = new HashMap<>();
+    private final Map<NodeID, N> nodeData = new HashMap<>();
+    private final Map<EdgeID, E> edgeData = new HashMap<>();
+    private NodeID prevNode;
+    private EdgeID prevEdge;
+
+    public WeightedGraphBuilderImpl() {
+        this(new IntegerNodeID(0), new LongEdgeID(0));
+    }
+    public WeightedGraphBuilderImpl(NodeID firstNodeID, EdgeID firstEdgeID) {
+        prevNode = firstNodeID;
+        prevEdge = firstEdgeID;
+    }
     public WeightedGraphBuilderImpl(WeightedGraph<N, E> graph) {
-        for(N node : graph.getNodes()) {
-            addNode(node);
-            for (N neighbour : graph.getNeighbours(node)) {
-                addDirEdge(node, graph.getEdgeBetween(node, neighbour), neighbour);
+        this(graph, new IntegerNodeID(0), new LongEdgeID(0));
+    }
+    public WeightedGraphBuilderImpl(WeightedGraph<N, E> graph, NodeID firstNodeID, EdgeID firstEdgeID) {
+        this(firstNodeID, firstEdgeID);
+
+        // create a builder with all the given graph's nodes and neighbours
+        Map<NodeID, NodeID> graphIDToBuilderID = new HashMap<>();
+
+        // add nodes
+        for(NodeID node : graph.getNodes()) {
+            graphIDToBuilderID.put(node, addNode(graph.getNodeData(node)));
+        }
+
+        // add neighbours
+        for(NodeID node : graph.getNodes()) {
+            for(NodeID neighbour : graph.getNeighbours(node)) {
+                addDirEdge(graphIDToBuilderID.get(node),
+                    graph.getEdgeData(graph.getEdgeBetween(node, neighbour)),
+                    graphIDToBuilderID.get(neighbour)
+                );
             }
         }
     }
 
     @Override
-    public WeightedGraphBuilder<N, E> addNode(N node) {
-        if(!adjacencyList.containsKey(node)) adjacencyList.put(node, new HashSet<>());
-        return this;
-    }
-    @Override
-    public WeightedGraphBuilder<N, E> removeNode(N node) {
-        adjacencyList.remove(node);
-        for(Set<EdgeEndpointPair<N, E>> edges : adjacencyList.values()) {
-            edges.removeIf(a -> a.getEndpoint().equals(node));
-        }
-        return this;
+    public NodeID addNode(N data) {
+        NodeID id = nextNodeID();
+        adjacencyList.put(id, new HashSet<>());
+        nodeData.put(id, data);
+        return id;
     }
 
     @Override
-    public Set<N> getNodes() {
-        return Collections.unmodifiableSet(adjacencyList.keySet());
+    public void addDirEdge(NodeID start, E edge, NodeID end) {
+        EdgeID id = nextEdgeID();
+        adjacencyList.get(start).add(new EdgeEndpointPair(id, end));
+        edgeData.put(id, edge);
     }
 
-    @Override
-    public WeightedGraphBuilder<N, E> addDirEdge(N start, E edge, N end) {
-        addNode(start).addNode(end);
-        adjacencyList.get(start).add(new EdgeEndpointPair<>(edge, end));
-        return this;
+
+    private NodeID nextNodeID() {
+        NodeID next = prevNode.incremented();
+        prevNode = next;
+        return next;
+    }
+    private EdgeID nextEdgeID() {
+        EdgeID next = prevEdge.incremented();
+        prevEdge = next;
+        return next;
     }
 
     @Override
     public WeightedGraph<N, E> build() {
-        WeightedGraph<N, E> graph = new AdjacencyListWeightedGraphImpl<>(adjacencyList);
-
-        // throw an exception if the restrictions are not met
-        for(val restriction : getRestrictions())
-            if(!restriction.isSatisfied(graph))
-                throw new RuntimeException("Failed to satisfy restriction: " + restriction);
-
-        return graph;
+        return new AdjacencyListWeightedGraphImpl<>(getRestrictions(), getEdgeRestrictions(), adjacencyList, nodeData, edgeData);
     }
 }

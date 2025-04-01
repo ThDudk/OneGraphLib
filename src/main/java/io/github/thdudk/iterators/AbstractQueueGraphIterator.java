@@ -1,6 +1,7 @@
 package io.github.thdudk.iterators;
 
 import io.github.thdudk.graphs.unweighted.Graph;
+import io.github.thdudk.ids.NodeID;
 import lombok.RequiredArgsConstructor;
 
 import java.util.HashSet;
@@ -12,21 +13,21 @@ import java.util.Set;
 ///
 /// This iterator will only call {@link Queue#offer(Object)}, {@link Queue#poll()} and {@link Queue#peek()}
 @RequiredArgsConstructor
-public abstract class AbstractQueueGraphIterator<N> implements GraphIterator<N> {
-    public record NodeParentPair<N>(N node, N parent) {}
+public abstract class AbstractQueueGraphIterator implements GraphIterator {
+    public record NodeParentPair(NodeID node, NodeID parent) {}
 
-    private final Queue<NodeParentPair<N>> queue;
-    private final Set<N> visited = new HashSet<>();
-    private N prevParent = null; // parent of the previously polled node
-    private final Graph<N> graph;
+    private final Queue<NodeParentPair> queue;
+    private final Set<NodeID> visited = new HashSet<>();
+    private NodeID prevParent = null; // parent of the previously polled node
+    private final Graph<?> graph;
 
-    public AbstractQueueGraphIterator(Queue<NodeParentPair<N>> queue, Graph<N> graph, N root) {
+    public AbstractQueueGraphIterator(Queue<NodeParentPair> queue, Graph<?> graph, NodeID root) {
         this(queue, graph);
-        queue.offer(new NodeParentPair<>(root, null));
+        queue.offer(new NodeParentPair(root, null));
     }
 
     @Override
-    public N getParent() {
+    public NodeID getParent() {
         return prevParent;
     }
 
@@ -44,20 +45,20 @@ public abstract class AbstractQueueGraphIterator<N> implements GraphIterator<N> 
     }
 
     @Override
-    public N next() {
+    public NodeID next() {
         removeVisitedFrontNodes(); // technically not needed as hasNext() also calls this
         if(!hasNext()) throw new NoSuchElementException();
 
-        NodeParentPair<N> pair = queue.poll();
+        NodeParentPair pair = queue.poll();
         assert pair != null; // to satisfy the compiler
         prevParent = pair.parent; // store the parent for getParent()
         visited.add(pair.node); // mark the current node as visited
 
         // add all unvisited neighbours to the queue
-        for(N neighbour : graph.getNeighbours(pair.node)) {
+        for(NodeID neighbour : graph.getNeighbours(pair.node)) {
             if(visited.contains(neighbour)) continue;
 
-            queue.offer(new NodeParentPair<>(neighbour, pair.node));
+            queue.offer(new NodeParentPair(neighbour, pair.node));
         }
 
         return pair.node;

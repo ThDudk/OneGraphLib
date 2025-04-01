@@ -3,70 +3,73 @@ package io.github.thdudk.builders;
 import io.github.thdudk.AbstractRestrictedGraph;
 import io.github.thdudk.graphs.unweighted.AdjacencyListGraphImpl;
 import io.github.thdudk.graphs.unweighted.Graph;
-import lombok.NoArgsConstructor;
-import lombok.val;
+import io.github.thdudk.ids.IntegerNodeID;
+import io.github.thdudk.ids.NodeID;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-@NoArgsConstructor
-public final class GraphBuilderImpl<N> extends AbstractRestrictedGraph<N> implements GraphBuilder<N> {
-    private final Map<N, Set<N>> adjacencyList = new HashMap<>();
+public class GraphBuilderImpl<N> extends AbstractRestrictedGraph<N> implements GraphBuilder<N> {
+    protected final Map<NodeID, Set<NodeID>> adjacencyList = new HashMap<>();
+    protected final Map<NodeID, N> nodeData = new HashMap<>();
+    private NodeID prevNode;
 
+    /// Calls {@link GraphBuilderImpl#GraphBuilderImpl(NodeID) this(new IntegerNodeID(0))}
+    public GraphBuilderImpl() {
+        this(new IntegerNodeID(0));
+    }
+    /// Sets the first node ID to `firstNodeID`
+    public GraphBuilderImpl(NodeID firstNodeID) {
+        prevNode = firstNodeID;
+    }
+    /// Calls {@link GraphBuilderImpl#GraphBuilderImpl(Graph, NodeID) this(graph, new IntegerNodeID(0))}
     public GraphBuilderImpl(Graph<N> graph) {
+        this(graph, new IntegerNodeID(0));
+    }
+    /// Creates a builder with all the nodes of `graph` and sets the first node ID to `firstNodeID`
+    public GraphBuilderImpl(Graph<N> graph, NodeID firstNodeID) {
+        this(firstNodeID);
+
         // create a builder with all the given graph's nodes and neighbours
-        for(N node : graph.getNodes()) {
-            addNode(node);
-            for(N neighbor : graph.getNeighbours(node)) {
-                addDirEdge(node, neighbor);
+        Map<NodeID, NodeID> graphIDToBuilderID = new HashMap<>();
+
+        // add nodes
+        for(NodeID node : graph.getNodes()) {
+            graphIDToBuilderID.put(node, addNode(graph.getNodeData(node)));
+        }
+
+        // add neighbours
+        for(NodeID node : graph.getNodes()) {
+            for(NodeID neighbour : graph.getNeighbours(node)) {
+                addDirEdge(graphIDToBuilderID.get(node), graphIDToBuilderID.get(neighbour));
             }
         }
     }
 
-    /**
-     * Adds node to this. If node is already contained in this, nothing happens.
-     * @param node node to add
-     * @return this to allow chaining
-     */
     @Override
-    public GraphBuilder<N> addNode(N node) {
-        if(!adjacencyList.containsKey(node)) adjacencyList.put(node, new HashSet<>());
-        return this;
-    }
-    @Override
-    public GraphBuilder<N> removeNode(N node) {
-        adjacencyList.remove(node);
-        for(Set<N> neighbours : adjacencyList.values()) {
-            neighbours.remove(node);
-        }
-        return this;
+    public NodeID addNode(N data) {
+        NodeID id = nextNodeID();
+        adjacencyList.putIfAbsent(id, new HashSet<>());
+        nodeData.put(id, data);
+        return id;
     }
 
     @Override
-    public GraphBuilder<N> addDirEdge(N root, N neighbor) {
-        addNode(root).addNode(neighbor);
-        adjacencyList.get(root).add(neighbor);
-        return this;
+    public void addDirEdge(NodeID root, NodeID neighbour) {
+        adjacencyList.get(root).add(neighbour);
     }
 
-
-    @Override
-    public Set<N> getNodes() {
-        return Collections.unmodifiableSet(adjacencyList.keySet());
+    /// Returns the next available nodeID for the recently added node
+    private NodeID nextNodeID() {
+        NodeID next = prevNode.incremented();
+        prevNode = next;
+        return next;
     }
 
-    /**
-     * Builds the graph with information from the builder
-     * @return the constructed graph
-     */
     @Override
     public Graph<N> build() {
-        Graph<N> graph = new AdjacencyListGraphImpl<>(getRestrictions(), adjacencyList);
-
-        // throws an exception if a restriction is not met
-        for(val restriction : getRestrictions())
-            if(!restriction.isSatisfied(graph))
-                throw new RuntimeException("Graph does not satisfy restrictions");
-
-        return graph;
+        return new AdjacencyListGraphImpl<>(getRestrictions(), adjacencyList, nodeData);
     }
 }

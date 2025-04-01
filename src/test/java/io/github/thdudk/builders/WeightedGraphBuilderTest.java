@@ -1,11 +1,12 @@
 package io.github.thdudk.builders;
 
+import io.github.thdudk.graphs.weighted.WeightedGraph;
+import io.github.thdudk.ids.NodeID;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,63 +19,64 @@ class WeightedGraphBuilderTest {
     @MethodSource("implementationsToTest")
     void addNodes(WeightedGraphBuilder<Integer, Integer> builder) {
         // assert nodes are added successfully
-        builder.addNode(1).addNode(2).addNode(3);
-        assertEquals(Set.of(1, 2, 3), builder.getNodes());
+        NodeID one = builder.addNode(1);
+        NodeID two = builder.addNode(2);
+        NodeID three = builder.addNode(3);
+        assertEquals(Set.of(one, two, three), new HashSet<>(builder.build().getNodes()));
+        assertEquals(Set.of(1, 2, 3), new HashSet<>(builder.build().getNodeDataMap().values()));
 
-        // assert duplicate inputs do not produce duplicate nodes
-        builder.addNode(1);
-        assertEquals(Set.of(1, 2, 3), builder.getNodes());
-    }
-    @ParameterizedTest
-    @MethodSource("implementationsToTest")
-    void removeNodes(WeightedGraphBuilder<Integer, Integer> builder) {
-        builder.addNode(1).addNode(2).addNode(3);
-
-        // assert nodes are removed successfully
-        builder.removeNode(1).removeNode(2);
-        assertEquals(Set.of(3), builder.getNodes());
-    }
-    @ParameterizedTest
-    @MethodSource("implementationsToTest")
-    void getNodes(WeightedGraphBuilder<Integer, Integer> builder) {
-        builder.addNode(1).addNode(2).addNode(3);
-
-        assertAll(
-            () -> assertEquals(Set.of(1, 2, 3), builder.getNodes()),
-            () -> assertThrows(RuntimeException.class, () -> builder.getNodes().add(4))
-        );
+        // assert duplicate inputs are added
+        NodeID one2 = builder.addNode(1);
+        assertEquals(Set.of(one, two, three, one2), new HashSet<>(builder.build().getNodes()));
+        assertEquals(Set.of(1, 2, 3), new HashSet<>(builder.build().getNodeDataMap().values()));
     }
 
     @ParameterizedTest
     @MethodSource("implementationsToTest")
     void addDirEdge(WeightedGraphBuilder<Integer, Integer> builder) {
-        builder.addNode(1).addNode(2).addNode(3);
+        NodeID one = builder.addNode(1);
+        NodeID two = builder.addNode(2);
+        NodeID three = builder.addNode(3);
 
         // assert directed edges are added
-        builder.addDirEdge(1, 4, 2);
-        builder.addDirEdge(2, 5, 3);
+        builder.addDirEdge(one, 4, two);
+        builder.addDirEdge(two, 5, three);
+
+        WeightedGraph<Integer, Integer> graph = builder.build();
         assertAll(
-            () -> assertEquals(Set.of(2), builder.build().getNeighbours(1)),
-            () -> assertEquals(Set.of(3), builder.build().getNeighbours(2)),
-            () -> assertEquals(Set.of(4), builder.build().getEdgesBetween(1, 2)),
-            () -> assertEquals(Set.of(5), builder.build().getEdgesBetween(2, 3))
+            () -> assertEquals(Set.of(two), new HashSet<>(graph.getNeighbours(one))),
+            () -> assertEquals(Set.of(three), new HashSet<>(graph.getNeighbours(two))),
+            () -> assertEquals(Set.of(4), graph.getEdgesBetween(one, two).stream().map(graph::getEdgeData).collect(Collectors.toSet())),
+            () -> assertEquals(Set.of(5), graph.getEdgesBetween(two, three).stream().map(graph::getEdgeData).collect(Collectors.toSet()))
         );
+
+        // assert that duplicate edges are added
+        builder.addDirEdge(one, 4, two);
+        assertEquals(List.of(4, 4), graph.getEdgesBetween(one, two).stream().map(graph::getEdgeData).toList());
     }
     @ParameterizedTest
     @MethodSource("implementationsToTest")
     void addUndirEdge(WeightedGraphBuilder<Integer, Integer> builder) {
-        builder.addNode(1).addNode(2).addNode(3);
+        NodeID one = builder.addNode(1);
+        NodeID two = builder.addNode(2);
+        NodeID three = builder.addNode(3);
 
         // assert directed edges are added
-        builder.addUndirEdge(1, 4, 2);
-        builder.addUndirEdge(2, 5, 3);
+        builder.addUndirEdge(one, 4, two);
+        builder.addUndirEdge(two, 5, three);
+
+        WeightedGraph<Integer, Integer> graph = builder.build();
         assertAll(
-            () -> assertEquals(Set.of(2), builder.build().getNeighbours(1)),
-            () -> assertEquals(Set.of(1, 3), builder.build().getNeighbours(2)),
-            () -> assertEquals(Set.of(2), builder.build().getNeighbours(3)),
-            () -> assertEquals(Set.of(4), builder.build().getEdgesBetween(2, 1)),
-            () -> assertEquals(Set.of(5), builder.build().getEdgesBetween(3, 2))
+            () -> assertEquals(Set.of(two), new HashSet<>(graph.getNeighbours(one))),
+            () -> assertEquals(Set.of(one, three), new HashSet<>(graph.getNeighbours(two))),
+            () -> assertEquals(Set.of(two), new HashSet<>(graph.getNeighbours(three))),
+            () -> assertEquals(List.of(4), graph.getEdgesBetween(two, one).stream().map(graph::getEdgeData).toList()),
+            () -> assertEquals(List.of(5), graph.getEdgesBetween(two, three).stream().map(graph::getEdgeData).toList())
         );
+
+        // assert that duplicate edges are added
+        builder.addUndirEdge(one, 4, two);
+        assertEquals(List.of(4, 4), graph.getEdgesBetween(one, two).stream().map(graph::getEdgeData).toList());
     }
 
     public static Collection<WeightedGraphBuilder<Integer, Integer>> implementationsToTest() {
