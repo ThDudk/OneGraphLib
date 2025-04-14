@@ -12,11 +12,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class PathGraphImpl<N> extends AbstractRestrictedGraph<N> implements PathGraph<N> {
+public class ListPathGraphImpl<N> extends AbstractRestrictedGraph<N> implements PathGraph<N> {
     private final List<NodeID> path;
     private final NodeDataContainer<N> nodeData;
 
-    public PathGraphImpl(Collection<GraphRestriction<N>> restrictions, List<NodeID> path, Map<NodeID, N> nodeData) {
+    public ListPathGraphImpl(Collection<GraphRestriction<N>> restrictions, List<NodeID> path, Map<NodeID, N> nodeData) {
         super(restrictions);
         addRestriction(new MaxDegreeRestriction<>(2));
         addRestriction(new DirectedRestriction<>());

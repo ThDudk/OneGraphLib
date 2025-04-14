@@ -1,10 +1,12 @@
-package io.github.thdudk.builders;
+package io.github.thdudk.builders.paths;
 
+import io.github.thdudk.builders.GraphBuilderImpl;
 import io.github.thdudk.graphs.unweighted.PathGraph;
-import io.github.thdudk.graphs.unweighted.PathGraphImpl;
+import io.github.thdudk.graphs.unweighted.ListPathGraphImpl;
 import io.github.thdudk.ids.NodeID;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -16,6 +18,9 @@ public class PathGraphBuilderImpl<N> extends GraphBuilderImpl<N> implements Path
     }
 
     private List<NodeID> asList() {
+        // return early if there are no nodes
+        if(nodeData.isEmpty()) return Collections.emptyList();
+
         List<NodeID> list = new ArrayList<>();
         NodeID curr = root;
         list.add(curr);
@@ -31,6 +36,6 @@ public class PathGraphBuilderImpl<N> extends GraphBuilderImpl<N> implements Path
 
     @Override
     public PathGraph<N> build() {
-        return new PathGraphImpl<>(getRestrictions(), asList(), nodeData);
+        return new ListPathGraphImpl<>(getRestrictions(), asList(), nodeData);
     }
 }
