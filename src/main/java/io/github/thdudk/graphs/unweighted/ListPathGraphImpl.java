@@ -1,6 +1,7 @@
 package io.github.thdudk.graphs.unweighted;
 
 import io.github.thdudk.AbstractRestrictedGraph;
+import io.github.thdudk.graphs.AbstractStructurelessGraph;
 import io.github.thdudk.graphs.NodeDataContainer;
 import io.github.thdudk.ids.NodeID;
 import io.github.thdudk.restrictions.DirectedRestriction;
@@ -12,17 +13,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class ListPathGraphImpl<N> extends AbstractRestrictedGraph<N> implements PathGraph<N> {
+public class ListPathGraphImpl<N> extends AbstractStructurelessGraph<N> implements PathGraph<N> {
     private final List<NodeID> path;
-    private final NodeDataContainer<N> nodeData;
 
     public ListPathGraphImpl(Collection<GraphRestriction<N>> restrictions, List<NodeID> path, Map<NodeID, N> nodeData) {
-        super(restrictions);
+        super(nodeData, restrictions);
         addRestriction(new MaxDegreeRestriction<>(2));
         addRestriction(new DirectedRestriction<>());
         this.path = path;
-
-        this.nodeData = new NodeDataContainer<>(nodeData);
 
         throwIfRestrictionsNotSatisfied(this);
     }
@@ -45,16 +43,7 @@ public class ListPathGraphImpl<N> extends AbstractRestrictedGraph<N> implements 
         return path;
     }
     @Override
-    public Collection<NodeID> getNeighbours(NodeID root) {
-        return List.of(path.get(path.indexOf(root) + 1));
-    }
-
-    @Override
-    public N getNodeData(NodeID id) {
-        return nodeData.getData(id);
-    }
-    @Override
-    public Collection<NodeID> nodeIdsWithData(N data) {
-        return nodeData.getIDs(data);
+    public Collection<NodeID> getNeighbours(NodeID node) {
+        return List.of(path.get(path.indexOf(node) + 1));
     }
 }

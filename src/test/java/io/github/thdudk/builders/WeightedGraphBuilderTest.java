@@ -1,5 +1,7 @@
 package io.github.thdudk.builders;
 
+import io.github.thdudk.builders.weighted.WeightedGraphBuilder;
+import io.github.thdudk.builders.weighted.WeightedGraphBuilderImpl;
 import io.github.thdudk.graphs.weighted.WeightedGraph;
 import io.github.thdudk.ids.NodeID;
 import org.junit.jupiter.params.ParameterizedTest;

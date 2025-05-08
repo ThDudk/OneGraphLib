@@ -1,4 +1,4 @@
-package io.github.thdudk.builders;
+package io.github.thdudk.builders.unweighted;
 
 import io.github.thdudk.AbstractRestrictedGraph;
 import io.github.thdudk.graphs.unweighted.AdjacencyListGraphImpl;
@@ -6,10 +6,7 @@ import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.ids.IntegerNodeID;
 import io.github.thdudk.ids.NodeID;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class GraphBuilderImpl<N> extends AbstractRestrictedGraph<N> implements GraphBuilder<N> {
     protected final Map<NodeID, Set<NodeID>> adjacencyList = new HashMap<>();
@@ -51,9 +48,20 @@ public class GraphBuilderImpl<N> extends AbstractRestrictedGraph<N> implements G
     @Override
     public NodeID addNode(N data) {
         NodeID id = nextNodeID();
+        addNode(id, data);
+        return id;
+    }
+
+    @Override
+    public Optional<N> addNode(NodeID id, N data) {
+        N replaced = null;
+        if(nodeData.containsKey(id)) {
+            replaced = nodeData.get(id);
+        }
         adjacencyList.putIfAbsent(id, new HashSet<>());
         nodeData.put(id, data);
-        return id;
+
+        return Optional.ofNullable(replaced);
     }
 
     @Override
@@ -61,9 +69,13 @@ public class GraphBuilderImpl<N> extends AbstractRestrictedGraph<N> implements G
         adjacencyList.get(root).add(neighbour);
     }
 
-    /// Returns the next available nodeID for the recently added node
+    /// Returns the next available nodeID.
     private NodeID nextNodeID() {
-        NodeID next = prevNode.incremented();
+        NodeID next;
+        do {
+            next = prevNode.incremented();
+        } while (nodeData.containsKey(next));
+
         prevNode = next;
         return next;
     }

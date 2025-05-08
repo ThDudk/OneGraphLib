@@ -1,22 +1,14 @@
 package io.github.thdudk;
 
-import io.github.thdudk.builders.DistinctDataGraphBuilderImpl;
-import io.github.thdudk.builders.GraphBuilder;
-import io.github.thdudk.builders.GraphBuilderImpl;
-import io.github.thdudk.builders.WeightedGraphBuilderImpl;
-import io.github.thdudk.builders.paths.PathGraphBuilder;
+import io.github.thdudk.builders.unweighted.DistinctDataGraphBuilderImpl;
+import io.github.thdudk.builders.unweighted.GraphBuilderImpl;
+import io.github.thdudk.builders.weighted.WeightedGraphBuilderImpl;
 import io.github.thdudk.builders.paths.PathGraphBuilderImpl;
-import io.github.thdudk.graphs.unweighted.AdjacencyListGraphImpl;
-import io.github.thdudk.iterators.AbstractQueueGraphIterator;
-import io.github.thdudk.iterators.BreadthFirstIterator;
-import io.github.thdudk.iterators.DepthFirstIterator;
 import io.github.thdudk.restrictions.GraphRestriction;
 import io.github.thdudk.restrictions.MaxDegreeRestriction;
 import io.github.thdudk.restrictions.UndirectedRestriction;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Collection;
 import java.util.List;

@@ -20,10 +20,4 @@ public interface RestrictedGraph<N> {
     default boolean hasRestriction(GraphRestriction<N> restriction) {
         return getRestrictions().contains(restriction);
     }
-
-    default void throwIfRestrictionsNotSatisfied(Graph<N> graph) {
-        List<GraphRestriction<N>> unsatisfied = getRestrictions().stream().filter(a -> !a.isSatisfied(graph)).toList();
-
-        if(!unsatisfied.isEmpty()) throw new RuntimeException("Graph failed to satisfy restrictions: " + unsatisfied);
-    }
 }

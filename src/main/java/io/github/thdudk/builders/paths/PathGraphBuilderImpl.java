@@ -1,6 +1,6 @@
 package io.github.thdudk.builders.paths;
 
-import io.github.thdudk.builders.GraphBuilderImpl;
+import io.github.thdudk.builders.unweighted.GraphBuilderImpl;
 import io.github.thdudk.graphs.unweighted.PathGraph;
 import io.github.thdudk.graphs.unweighted.ListPathGraphImpl;
 import io.github.thdudk.ids.NodeID;

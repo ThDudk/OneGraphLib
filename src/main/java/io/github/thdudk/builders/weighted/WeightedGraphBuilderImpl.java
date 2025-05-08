@@ -1,4 +1,4 @@
-package io.github.thdudk.builders;
+package io.github.thdudk.builders.weighted;
 
 import io.github.thdudk.AbstractWeightedRestrictedGraph;
 import io.github.thdudk.graphs.weighted.AdjacencyListWeightedGraphImpl;

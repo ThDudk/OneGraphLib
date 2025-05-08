@@ -1,4 +1,4 @@
-package io.github.thdudk.iterators;
+package io.github.thdudk.iterators.node;
 
 import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.ids.NodeID;

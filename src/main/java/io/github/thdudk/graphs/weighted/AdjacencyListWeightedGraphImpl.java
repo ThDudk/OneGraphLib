@@ -39,8 +39,8 @@ public class AdjacencyListWeightedGraphImpl<N, E> extends AbstractWeightedRestri
         return Collections.unmodifiableCollection(adjacencyList.keySet());
     }
     @Override
-    public Collection<NodeID> getNeighbours(NodeID root) {
-        return adjacencyList.get(root).stream().map(EdgeEndpointPair::getEndpoint).toList();
+    public Collection<NodeID> getNeighbours(NodeID node) {
+        return adjacencyList.get(node).stream().map(EdgeEndpointPair::getEndpoint).toList();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package io.github.thdudk.builders;
+package io.github.thdudk.builders.unweighted;
 
 public interface DistinctDataGraphBuilder<N> extends GraphBuilder<N> {
     void addDirEdge(N start, N end);

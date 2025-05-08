@@ -1,22 +1,12 @@
 package io.github.thdudk;
 
-import io.github.thdudk.builders.DistinctDataGraphBuilderImpl;
-import io.github.thdudk.builders.GraphBuilderImpl;
-import io.github.thdudk.builders.WeightedGraphBuilderImpl;
-import io.github.thdudk.builders.paths.PathGraphBuilderImpl;
-import io.github.thdudk.graphs.unweighted.Graph;
+import io.github.thdudk.builders.weighted.WeightedGraphBuilderImpl;
 import io.github.thdudk.graphs.weighted.WeightedGraph;
-import io.github.thdudk.ids.NodeID;
 import io.github.thdudk.restrictions.GraphEdgeRestriction;
-import io.github.thdudk.restrictions.GraphRestriction;
-import io.github.thdudk.restrictions.MaxDegreeRestriction;
-import io.github.thdudk.restrictions.UndirectedRestriction;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

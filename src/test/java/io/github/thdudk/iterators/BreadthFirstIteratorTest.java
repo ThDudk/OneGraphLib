@@ -3,6 +3,7 @@ package io.github.thdudk.iterators;
 import io.github.thdudk.TestGraphs;
 import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.ids.NodeID;
+import io.github.thdudk.iterators.node.BreadthFirstIterator;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;

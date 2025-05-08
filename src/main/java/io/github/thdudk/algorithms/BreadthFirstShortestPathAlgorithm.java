@@ -5,7 +5,7 @@ import io.github.thdudk.builders.paths.PathGraphBuilderImpl;
 import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.graphs.unweighted.PathGraph;
 import io.github.thdudk.ids.NodeID;
-import io.github.thdudk.iterators.BreadthFirstIterator;
+import io.github.thdudk.iterators.node.BreadthFirstIterator;
 
 import java.util.*;
 

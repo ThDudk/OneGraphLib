@@ -1,12 +1,11 @@
 package io.github.thdudk.builders;
 
-import io.github.thdudk.TestGraphs;
-import io.github.thdudk.graphs.unweighted.Graph;
+import io.github.thdudk.builders.unweighted.GraphBuilder;
+import io.github.thdudk.builders.unweighted.GraphBuilderImpl;
 import io.github.thdudk.ids.NodeID;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;

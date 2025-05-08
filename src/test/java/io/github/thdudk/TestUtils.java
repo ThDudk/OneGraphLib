@@ -1,12 +1,9 @@
 package io.github.thdudk;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.thdudk.builders.DistinctDataGraphBuilder;
-import io.github.thdudk.builders.DistinctDataGraphBuilderImpl;
-import io.github.thdudk.builders.GraphBuilder;
-import io.github.thdudk.builders.GraphBuilderImpl;
+import io.github.thdudk.builders.unweighted.DistinctDataGraphBuilder;
+import io.github.thdudk.builders.unweighted.DistinctDataGraphBuilderImpl;
 import io.github.thdudk.graphs.unweighted.Graph;
-import io.github.thdudk.ids.NodeID;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -1,7 +1,8 @@
-package io.github.thdudk.iterators;
+package io.github.thdudk.iterators.node;
 
 import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.ids.NodeID;
+import io.github.thdudk.iterators.NodeParentPair;
 
 import java.util.LinkedList;
 
@@ -9,7 +10,7 @@ import java.util.LinkedList;
 ///
 /// In other words, it will iterate through a path until it no longer can, then backtrack to take the next available path.
 public class DepthFirstIterator extends AbstractQueueGraphIterator {
-    private static class LIFOQueue extends LinkedList<NodeParentPair> {
+    public static class LIFOQueue extends LinkedList<NodeParentPair> {
         @Override
         public NodeParentPair poll() {
             return pollLast();

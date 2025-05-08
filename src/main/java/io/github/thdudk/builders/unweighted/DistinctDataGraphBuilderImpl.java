@@ -1,4 +1,4 @@
-package io.github.thdudk.builders;
+package io.github.thdudk.builders.unweighted;
 
 import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.ids.IntegerNodeID;
