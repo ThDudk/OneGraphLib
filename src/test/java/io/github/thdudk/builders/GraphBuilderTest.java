@@ -2,6 +2,7 @@ package io.github.thdudk.builders;
 
 import io.github.thdudk.builders.unweighted.GraphBuilder;
 import io.github.thdudk.builders.unweighted.GraphBuilderImpl;
+import io.github.thdudk.ids.IntegerNodeID;
 import io.github.thdudk.ids.NodeID;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;

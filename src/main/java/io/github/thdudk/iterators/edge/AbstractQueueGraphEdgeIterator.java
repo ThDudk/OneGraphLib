@@ -2,8 +2,8 @@ package io.github.thdudk.iterators.edge;
 
 import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.ids.NodeID;
-import io.github.thdudk.iterators.node.AbstractQueueGraphIterator;
 import io.github.thdudk.iterators.NodeParentPair;
+import io.github.thdudk.iterators.node.AbstractQueueGraphIterator;
 
 import java.util.HashSet;
 import java.util.Queue;

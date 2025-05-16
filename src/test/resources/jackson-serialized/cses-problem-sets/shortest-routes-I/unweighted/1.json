@@ -1,27 +1,325 @@
 {
   "restrictions" : [ ],
-  "unweightedAdjacencyList" : {
-    "1" : [ 2, 3 ],
-    "2" : [ 7, 6, 9 ],
-    "3" : [ 1, 4 ],
-    "4" : [ 3, 5 ],
-    "5" : [ 1, 4, 3 ],
-    "6" : [ 2, 8 ],
-    "7" : [ 5 ],
-    "8" : [ 9 ],
-    "9" : [ 2, 6, 8 ],
-    "10" : [ 8 ]
-  },
-  "nodeDataMap" : {
-    "1" : "8",
-    "2" : "5",
-    "3" : "9",
-    "4" : "10",
-    "5" : "7",
-    "6" : "4",
-    "7" : "6",
-    "8" : "2",
-    "9" : "3",
-    "10" : "1"
-  }
+  "nodes" : [ {
+    "id" : {
+      "type" : "INT",
+      "id" : 10
+    },
+    "data" : "1"
+  }, {
+    "id" : {
+      "type" : "INT",
+      "id" : 9
+    },
+    "data" : "3"
+  }, {
+    "id" : {
+      "type" : "INT",
+      "id" : 8
+    },
+    "data" : "2"
+  }, {
+    "id" : {
+      "type" : "INT",
+      "id" : 7
+    },
+    "data" : "6"
+  }, {
+    "id" : {
+      "type" : "INT",
+      "id" : 6
+    },
+    "data" : "4"
+  }, {
+    "id" : {
+      "type" : "INT",
+      "id" : 5
+    },
+    "data" : "7"
+  }, {
+    "id" : {
+      "type" : "INT",
+      "id" : 4
+    },
+    "data" : "10"
+  }, {
+    "id" : {
+      "type" : "INT",
+      "id" : 3
+    },
+    "data" : "9"
+  }, {
+    "id" : {
+      "type" : "INT",
+      "id" : 2
+    },
+    "data" : "5"
+  }, {
+    "id" : {
+      "type" : "INT",
+      "id" : 1
+    },
+    "data" : "8"
+  } ],
+  "edges" : [ {
+    "start" : {
+      "type" : "INT",
+      "id" : 10
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 8
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 16
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 9
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 2
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 14
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 9
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 8
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 20
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 9
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 6
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 19
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 8
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 9
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 17
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 7
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 5
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 18
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 6
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 8
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 11
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 6
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 2
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 9
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 5
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 3
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 3
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 5
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 1
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 6
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 5
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 4
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 8
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 4
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 5
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 13
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 4
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 3
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 5
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 3
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 1
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 4
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 3
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 4
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 2
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 2
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 9
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 12
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 2
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 7
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 10
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 2
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 6
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 15
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 1
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 2
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 1
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 1
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 3
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 7
+    }
+  } ]
 }

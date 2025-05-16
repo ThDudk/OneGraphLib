@@ -1,27 +1,26 @@
 package io.github.thdudk.graphs.unweighted;
 
-import io.github.thdudk.AbstractRestrictedGraph;
-import io.github.thdudk.graphs.AbstractStructurelessGraph;
 import io.github.thdudk.ids.NodeID;
 import io.github.thdudk.iterators.GraphIterator;
 import io.github.thdudk.iterators.node.DepthFirstIterator;
-import io.github.thdudk.restrictions.DirectedRestriction;
-import io.github.thdudk.restrictions.GraphRestriction;
-import io.github.thdudk.restrictions.MaxInDegreeRestriction;
-import io.github.thdudk.restrictions.WeaklyConnectedGraphRestriction;
+import io.github.thdudk.restrictions.*;
 import lombok.Getter;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class TwoWayTreeGraphImpl<N> extends AdjacencyListGraphImpl<N> implements TreeGraph<N> {
     @Getter
     private final NodeID root;
     private final Map<NodeID, NodeID> parentMap;
 
-    public TwoWayTreeGraphImpl(Collection<GraphRestriction<N>> restrictions, NodeID root, Map<NodeID, Set<NodeID>> adjacencyList, Map<NodeID, N> data) {
+    public TwoWayTreeGraphImpl(Collection<GraphRestriction<N>> restrictions, NodeID root, Map<NodeID, Set<EdgeEndpointPair>> adjacencyList, Map<NodeID, N> data) {
         super(restrictions, adjacencyList, data);
         addRestriction(new DirectedRestriction<>());
         addRestriction(new MaxInDegreeRestriction<>(1));
+        addRestriction(new NoMultiEdgesRestriction<>());
         addRestriction(new WeaklyConnectedGraphRestriction<>());
 
         this.root = root;
@@ -31,6 +30,8 @@ public class TwoWayTreeGraphImpl<N> extends AdjacencyListGraphImpl<N> implements
         while(iterator.hasNext()) {
             parentMap.put(iterator.next(), iterator.getParent());
         }
+
+        throwIfRestrictionsNotSatisfied();
     }
 
     @Override

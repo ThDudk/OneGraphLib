@@ -12,9 +12,9 @@ import java.io.IOException;
 
 public abstract class TestUtils {
     // used quickly to generate jackson serialized instances of the CSES Shortest Routes I graphs
-//    public static void main(String[] args) throws IOException {
-//        doTheThing(6);
-//    }
+    public static void main(String[] args) throws IOException {
+        doTheThing(1);
+    }
     static void doTheThing(int num) throws IOException {
         // read in graph
         DistinctDataGraphBuilder<String> builder = new DistinctDataGraphBuilderImpl<>();

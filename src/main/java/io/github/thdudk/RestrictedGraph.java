@@ -1,10 +1,8 @@
 package io.github.thdudk;
 
-import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.restrictions.GraphRestriction;
 
 import java.util.Collection;
-import java.util.List;
 
 public interface RestrictedGraph<N> {
     Collection<GraphRestriction<N>> getRestrictions();

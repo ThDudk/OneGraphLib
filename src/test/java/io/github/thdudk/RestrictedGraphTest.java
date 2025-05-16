@@ -3,7 +3,7 @@ package io.github.thdudk;
 import io.github.thdudk.builders.unweighted.DistinctDataGraphBuilderImpl;
 import io.github.thdudk.builders.unweighted.GraphBuilderImpl;
 import io.github.thdudk.builders.weighted.WeightedGraphBuilderImpl;
-import io.github.thdudk.builders.paths.PathGraphBuilderImpl;
+import io.github.thdudk.builders.paths.PathBuilderImpl;
 import io.github.thdudk.restrictions.GraphRestriction;
 import io.github.thdudk.restrictions.MaxDegreeRestriction;
 import io.github.thdudk.restrictions.UndirectedRestriction;
@@ -50,12 +50,12 @@ class RestrictedGraphTest {
             new GraphBuilderImpl<>(),
             new DistinctDataGraphBuilderImpl<>(),
             new WeightedGraphBuilderImpl<>(),
-            new PathGraphBuilderImpl<>(),
+            new PathBuilderImpl<>(),
 
             new GraphBuilderImpl<>().build(),
             new DistinctDataGraphBuilderImpl<>().build(),
             new WeightedGraphBuilderImpl<>().build(),
-            new PathGraphBuilderImpl<>().build()
+            new PathBuilderImpl<>().build()
         );
     }
 }

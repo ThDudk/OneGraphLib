@@ -4,7 +4,6 @@ import io.github.thdudk.WeightedRestrictedGraph;
 import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.ids.EdgeID;
 import io.github.thdudk.ids.NodeID;
-import lombok.Value;
 
 import java.util.Collection;
 
@@ -14,13 +13,6 @@ import java.util.Collection;
  * @param <E> Type of the edges contained in the graph
  */
 public interface WeightedGraph<N, E> extends Graph<N>, WeightedRestrictedGraph<N, E> {
-    /// Pair of an edge and it's endpoint
-    @Value
-    class EdgeEndpointPair {
-        EdgeID edge;
-        NodeID endpoint;
-    }
-
     /// If start and end are not neighbours, an empty set should be returned.
     ///
     /// @return the data of all edges between start and end.
@@ -28,7 +20,7 @@ public interface WeightedGraph<N, E> extends Graph<N>, WeightedRestrictedGraph<N
     /// If there are more than one edges between start and end, the returned edge value is arbitrary.
     ///
     /// If there is the possibility of more than one edge being present,
-    /// {@link #getEdgesBetween(Object, Object) getEdgesBetween(start, end)} should be used instead.
+    /// {@link #getEdgesBetween(NodeID, NodeID)} should be used instead.
     ///
     /// @return the data of the edge between start and end
     /// @throws IllegalArgumentException if there are no edges between start and end

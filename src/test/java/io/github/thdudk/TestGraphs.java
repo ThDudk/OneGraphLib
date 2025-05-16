@@ -12,10 +12,10 @@ import java.io.IOException;
 public abstract class TestGraphs {
     static final ObjectMapper mapper = new ObjectMapper();
 
-//    public static void main(String[] args) {
-//        Graph<Integer> graph = getCSESShortestRoutesIGraphNum(5);
-//        System.out.println(graph);
-//    }
+    public static void main(String[] args) {
+        Graph<Integer> graph = getCSESShortestRoutesIGraphNum(1);
+        System.out.println(graph);
+    }
 
     @SneakyThrows(IOException.class)
     /// @param num graph number (1-5 inclusive)

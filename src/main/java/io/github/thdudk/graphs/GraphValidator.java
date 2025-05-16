@@ -1,6 +1,7 @@
 package io.github.thdudk.graphs;
 
 import io.github.thdudk.graphs.unweighted.Graph;
+import io.github.thdudk.ids.EdgeID;
 import io.github.thdudk.ids.NodeID;
 
 import java.util.Collection;
@@ -12,8 +13,14 @@ public class GraphValidator {
     /// Determines which (if any) of the given nodes are not contained in this and throws an exception listing the nodes not contained.
     /// @param nodes nodes to check
     /// @throws IllegalArgumentException If any of the provided nodes are not contained in this
-    public static void requireContained(Collection<NodeID> nodes, Graph<?> graph) {
-        List<NodeID> notContained = nodes.stream().filter(a -> a == null || !graph.getNodes().contains(a)).toList();
+    public static void requireNodesContained(Collection<NodeID> nodes, Graph<?> graph) {
+        List<NodeID> notContained = nodes.stream().filter(node -> node == null || !graph.hasNode(node)).toList();
+
+        if(notContained.isEmpty()) return;
+        throw new IllegalArgumentException("Given nodes must be within the graph. Illegal nodes: " + notContained);
+    }
+    public static void requireEdgesContained(Collection<EdgeID> nodes, Graph<?> graph) {
+        List<EdgeID> notContained = nodes.stream().filter(edge -> edge == null || !graph.hasEdge(edge)).toList();
 
         if(notContained.isEmpty()) return;
         throw new IllegalArgumentException("Given nodes must be within the graph. Illegal nodes: " + notContained);

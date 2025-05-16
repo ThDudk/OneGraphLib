@@ -1,8 +1,7 @@
 package io.github.thdudk.graphs.weighted;
 
 import io.github.thdudk.AbstractWeightedRestrictedGraph;
-import io.github.thdudk.graphs.EdgeDataContainer;
-import io.github.thdudk.graphs.NodeDataContainer;
+import io.github.thdudk.graphs.TwoWayDataContainer;
 import io.github.thdudk.ids.EdgeID;
 import io.github.thdudk.ids.NodeID;
 import io.github.thdudk.restrictions.GraphEdgeRestriction;
@@ -20,17 +19,17 @@ import java.util.stream.Collectors;
 @ToString(callSuper = true)
 public class AdjacencyListWeightedGraphImpl<N, E> extends AbstractWeightedRestrictedGraph<N, E> implements WeightedGraph<N, E> {
     private final Map<NodeID, Set<EdgeEndpointPair>> adjacencyList;
-    private final NodeDataContainer<N> nodeData;
-    private final EdgeDataContainer<E> edgeData;
+    private final TwoWayDataContainer<NodeID, N> nodeData;
+    private final TwoWayDataContainer<EdgeID, E> edgeData;
 
     public AdjacencyListWeightedGraphImpl(Collection<GraphRestriction<N>> restrictions, Collection<GraphEdgeRestriction<N, E>> edgeRestrictions, Map<NodeID, Set<EdgeEndpointPair>> adjacencyList, Map<NodeID, N> nodeData, Map<EdgeID, E> edgeData) {
         super(restrictions, edgeRestrictions);
         this.adjacencyList = adjacencyList;
 
-        this.nodeData = new NodeDataContainer<>(nodeData);
-        this.edgeData = new EdgeDataContainer<>(edgeData);
+        this.nodeData = new TwoWayDataContainer<>(nodeData);
+        this.edgeData = new TwoWayDataContainer<>(edgeData);
 
-        throwIfRestrictionsNotSatisfied(this);
+        throwIfRestrictionsNotSatisfied();
         throwIfEdgeRestrictionsNotSatisfied(this);
     }
 

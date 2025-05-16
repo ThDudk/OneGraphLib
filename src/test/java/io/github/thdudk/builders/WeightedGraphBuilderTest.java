@@ -41,8 +41,8 @@ class WeightedGraphBuilderTest {
         NodeID three = builder.addNode(3);
 
         // assert directed edges are added
-        builder.addDirEdge(one, 4, two);
-        builder.addDirEdge(two, 5, three);
+        builder.addDirEdge(one, two, 4);
+        builder.addDirEdge(two, three, 5);
 
         WeightedGraph<Integer, Integer> graph = builder.build();
         assertAll(
@@ -53,7 +53,7 @@ class WeightedGraphBuilderTest {
         );
 
         // assert that duplicate edges are added
-        builder.addDirEdge(one, 4, two);
+        builder.addDirEdge(one, two, 4);
         assertEquals(List.of(4, 4), graph.getEdgesBetween(one, two).stream().map(graph::getEdgeData).toList());
     }
     @ParameterizedTest
@@ -64,8 +64,8 @@ class WeightedGraphBuilderTest {
         NodeID three = builder.addNode(3);
 
         // assert directed edges are added
-        builder.addUndirEdge(one, 4, two);
-        builder.addUndirEdge(two, 5, three);
+        builder.addUndirEdge(one, two, 4);
+        builder.addUndirEdge(two, three, 5);
 
         WeightedGraph<Integer, Integer> graph = builder.build();
         assertAll(
@@ -77,7 +77,7 @@ class WeightedGraphBuilderTest {
         );
 
         // assert that duplicate edges are added
-        builder.addUndirEdge(one, 4, two);
+        builder.addUndirEdge(one, two, 4);
         assertEquals(List.of(4, 4), graph.getEdgesBetween(one, two).stream().map(graph::getEdgeData).toList());
     }
 

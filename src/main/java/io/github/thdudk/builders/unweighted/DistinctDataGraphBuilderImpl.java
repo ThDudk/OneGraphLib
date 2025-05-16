@@ -1,7 +1,5 @@
 package io.github.thdudk.builders.unweighted;
 
-import io.github.thdudk.graphs.unweighted.Graph;
-import io.github.thdudk.ids.IntegerNodeID;
 import io.github.thdudk.ids.NodeID;
 
 import java.util.HashMap;
@@ -10,52 +8,28 @@ import java.util.Map;
 public class DistinctDataGraphBuilderImpl<N> extends GraphBuilderImpl<N> implements DistinctDataGraphBuilder<N> {
     private final Map<N, NodeID> dataToId = new HashMap<>();
 
-    public DistinctDataGraphBuilderImpl() {
-        super();
-    }
-    public DistinctDataGraphBuilderImpl(NodeID firstNodeID) {
-        super(firstNodeID);
-    }
-    public DistinctDataGraphBuilderImpl(Graph<N> graph) {
-        this(graph, new IntegerNodeID(0));
-    }
-    public DistinctDataGraphBuilderImpl(Graph<N> graph, NodeID firstNodeID) {
-        this(firstNodeID);
-
-        // create a builder with all the given graph's nodes and neighbours
-        Map<NodeID, NodeID> graphIDToBuilderID = new HashMap<>();
-
-        // add nodes
-        for(NodeID node : graph.getNodes()) {
-            graphIDToBuilderID.put(node, addNode(graph.getNodeData(node)));
-        }
-
-        // add neighbours
-        for(NodeID node : graph.getNodes()) {
-            for(NodeID neighbour : graph.getNeighbours(node)) {
-                addDirEdge(graphIDToBuilderID.get(node), graphIDToBuilderID.get(neighbour));
-            }
-        }
-    }
-
     @Override
     public NodeID addNode(N data) {
-        if(contains(data))
-            return idOf(data);
+        if(contains(data)) throw new RuntimeException("Expected distinct data but got a duplicate.");
 
         NodeID id = super.addNode(data);
         dataToId.put(data, id);
 
         return id;
     }
-    public boolean contains(N data) {
-        return super.nodeData.containsValue(data);
+    private boolean contains(N data) {
+        return dataToId.containsKey(data);
     }
 
     @Override
     public void addDirEdge(N start, N end) {
-        NodeID startID = addNode(start);
-        NodeID endID = addNode(end);
+        // add start and end if they're not already contained
+        if(!contains(start)) addNode(start);
+        if(!contains(end)) addNode(end);
+
+        // get their ids
+        NodeID startID = idOf(start);
+        NodeID endID = idOf(end);
 
         addDirEdge(startID, endID);
     }

@@ -1,28 +1,61 @@
 package io.github.thdudk.graphs.unweighted;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JacksonStdImpl;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.github.thdudk.RestrictedGraph;
+import io.github.thdudk.builders.unweighted.ExplicitIdsGraphBuilderImpl;
+import io.github.thdudk.ids.EdgeID;
 import io.github.thdudk.ids.NodeID;
-import io.github.thdudk.iterators.node.DepthFirstIterator;
 import io.github.thdudk.restrictions.GraphRestriction;
+import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-/**
- * Representation of an unweighted graph.
- * Graph only deals with neighbours, rather than edges. Consequently, implementations should NOT allow multiple edges between two nodes (multiedges).
- * If multiedges are possible, {@link io.github.thdudk.graphs.weighted.WeightedGraph WeightedGraph} should be used instead, as it does support multiedges.
- *
- * @param <N> The Type of the nodes contained in the graph
- */
-@JsonDeserialize(as = AdjacencyListGraphImpl.class)
+/// @param <N> The Type of the nodes contained in the graph
+@JsonDeserialize(builder = ExplicitIdsGraphBuilderImpl.class)
 public interface Graph<N> extends RestrictedGraph<N> {
+    /// Pair of an edge and it's endpoint
+    @Value
+    class EdgeEndpointPair {
+        EdgeID edge;
+        NodeID endpoint;
+    }
+
+    record NodeDescriptor<N> (NodeID id, N data) { }
+    record EdgeDescriptor (NodeID start, NodeID end, EdgeID id) { }
+
+    default boolean hasNode(NodeID id) {
+        return getNodes().contains(id);
+    }
+    /// Finds the edge by iterating over all edges.
+    /// It's recommended this gets overridden with a more efficient implementation in subclasses.
+    default boolean hasEdge(EdgeID id) {
+        for(NodeID node : getNodes()) {
+            for(NodeID neighbour : getNeighbours(node)) {
+                if(getEdgesBetween(node, neighbour).contains(id)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     @JsonIgnore
     Collection<NodeID> getNodes();
     /// @return all out-neighbours of node
-    /// @throws IllegalArgumentException If node is not contained in this
+    /// @throws IllegalArgumentException If `node` is not contained in this
     Collection<NodeID> getNeighbours(NodeID node);
+
+    /// If start and end are not neighbours, an empty set should be returned.
+    ///
+    /// @return the data of all edges between start and end.
+    Collection<EdgeID> getEdgesBetween(NodeID start, NodeID end);
 
     /// Returns all nodes with an edge going into node.
     /// This includes undirected edges.
@@ -52,19 +85,31 @@ public interface Graph<N> extends RestrictedGraph<N> {
         return nodeIdsWithData(data).stream().findAny().orElseThrow();
     };
 
-    /// Constructs an adjacency list representing this
-    default Map<NodeID, Collection<NodeID>> getUnweightedAdjacencyList() {
-        Map<NodeID, Collection<NodeID>> map = new HashMap<>();
-        for(NodeID node : getNodes()) map.put(node, getNeighbours(node));
-        return map;
-    }
+    @JsonIgnore
     default Map<NodeID, N> getNodeDataMap() {
-        Map<NodeID, N> map = new HashMap<>();
-        for(NodeID id : getNodes()) {
-            map.put(id, getNodeData(id));
+        return getNodeDescriptors().stream().collect(Collectors.toMap(NodeDescriptor::id, NodeDescriptor::data));
+    }
+
+    @JsonProperty("nodes")
+    default Collection<NodeDescriptor<N>> getNodeDescriptors() {
+        Collection<NodeDescriptor<N>> collection = new ArrayList<>();
+        for(NodeID node : getNodes()) {
+            collection.add(new NodeDescriptor<>(node, getNodeData(node)));
         }
-        return map;
-    };
+        return collection;
+    }
+    @JsonProperty("edges")
+    default Collection<EdgeDescriptor> getEdgeDescriptors() {
+        Collection<EdgeDescriptor> collection = new ArrayList<>();
+        for(NodeID node : getNodes()) {
+            for(NodeID neighbour : getNeighbours(node)) {
+                for(EdgeID edge : getEdgesBetween(node, neighbour)) {
+                    collection.add(new EdgeDescriptor(node, neighbour, edge));
+                }
+            }
+        }
+        return collection;
+    }
 
     default void throwIfRestrictionsNotSatisfied() {
         List<GraphRestriction<N>> unsatisfied = getRestrictions().stream().filter(a -> !a.isSatisfied(this)).toList();

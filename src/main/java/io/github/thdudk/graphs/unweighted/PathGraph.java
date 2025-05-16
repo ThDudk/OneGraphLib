@@ -8,7 +8,8 @@ import java.util.List;
 /// Graph with the following restrictions:
 /// - directed
 /// - max degree = 2
-@JsonDeserialize(as = ListPathGraphImpl.class)
+/// - no multi-edges
+@JsonDeserialize(as = PathGraphImpl.class)
 public interface PathGraph<N> extends Graph<N> {
     NodeID getRoot();
     NodeID getEnd();
