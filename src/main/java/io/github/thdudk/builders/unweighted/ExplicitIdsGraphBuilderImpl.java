@@ -11,6 +11,7 @@ import io.github.thdudk.restrictions.GraphRestriction;
 import lombok.NoArgsConstructor;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 @NoArgsConstructor
 public class ExplicitIdsGraphBuilderImpl<N> extends AbstractRestrictedGraph<N> implements ExplicitIdsGraphBuilder<N> {
@@ -18,20 +19,20 @@ public class ExplicitIdsGraphBuilderImpl<N> extends AbstractRestrictedGraph<N> i
     protected final Map<NodeID, Set<Graph.EdgeEndpointPair>> adjacencyList = new HashMap<>();
     protected final Map<NodeID, N> nodeData = new HashMap<>();
 
-    /// Creates a builder with all the nodes of `graph`
+    /// Creates a builder copy of the given graph.
+    ///
+    /// NodeIDs and edgeIDs are conserved.
     public ExplicitIdsGraphBuilderImpl(Graph<N> graph) {
+        addAllRestrictions(graph.getRestrictions());
+
         // add nodes
         for(NodeID node : graph.getNodes()) {
             addNode(node, graph.getNodeData(node));
         }
 
         // add neighbours
-        for(NodeID node : graph.getNodes()) {
-            for(NodeID neighbour : graph.getNeighbours(node)) {
-                for(EdgeID edgeID : graph.getEdgesBetween(node, neighbour)) {
-                    addDirEdge(node, neighbour, edgeID);
-                }
-            }
+        for(Graph.EdgeDescriptor edge : graph.getEdgeDescriptors()) {
+            addDirEdge(edge.start(), edge.end(), edge.id());
         }
     }
 
@@ -63,6 +64,15 @@ public class ExplicitIdsGraphBuilderImpl<N> extends AbstractRestrictedGraph<N> i
 
     @Override
     public void addDirEdge(NodeID root, NodeID neighbour, EdgeID edgeId) {
+        if(adjacencyList.values().stream()
+            .flatMap(Collection::stream)
+            .map(Graph.EdgeEndpointPair::getEdge)
+            .toList()
+            .contains(edgeId)
+        ) {
+            throw new RuntimeException("Cannot have duplicate edgeIds");
+        }
+
         adjacencyList.get(root).add(new Graph.EdgeEndpointPair(edgeId, neighbour));
     }
 

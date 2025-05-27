@@ -4,13 +4,17 @@ import io.github.thdudk.ids.NodeID;
 import io.github.thdudk.iterators.GraphIterator;
 import io.github.thdudk.iterators.node.DepthFirstIterator;
 import io.github.thdudk.restrictions.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+@EqualsAndHashCode(callSuper = true)
+@ToString
 public class TwoWayTreeGraphImpl<N> extends AdjacencyListGraphImpl<N> implements TreeGraph<N> {
     @Getter
     private final NodeID root;

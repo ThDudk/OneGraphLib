@@ -16,9 +16,7 @@ public abstract class AbstractRestrictedGraph<N> implements RestrictedGraph<N> {
     private final Collection<GraphRestriction<N>> restrictions = new HashSet<>();
 
     public AbstractRestrictedGraph(Collection<GraphRestriction<N>> restrictions) {
-        for(GraphRestriction<N> restriction : restrictions) {
-            addRestriction(restriction);
-        }
+        this.restrictions.addAll(restrictions);
     }
 
     @Override

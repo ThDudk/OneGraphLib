@@ -1,12 +1,19 @@
 package io.github.thdudk.builders.unweighted;
 
+import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.ids.NodeID;
+import io.github.thdudk.restrictions.DistinctDataRestriction;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class DistinctDataGraphBuilderImpl<N> extends GraphBuilderImpl<N> implements DistinctDataGraphBuilder<N> {
     private final Map<N, NodeID> dataToId = new HashMap<>();
+
+    public DistinctDataGraphBuilderImpl() {
+        super();
+        addRestriction(new DistinctDataRestriction<>());
+    }
 
     @Override
     public NodeID addNode(N data) {

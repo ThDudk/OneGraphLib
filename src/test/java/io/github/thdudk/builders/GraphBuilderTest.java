@@ -2,8 +2,9 @@ package io.github.thdudk.builders;
 
 import io.github.thdudk.builders.unweighted.GraphBuilder;
 import io.github.thdudk.builders.unweighted.GraphBuilderImpl;
-import io.github.thdudk.ids.IntegerNodeID;
 import io.github.thdudk.ids.NodeID;
+import io.github.thdudk.restrictions.DirectedRestriction;
+import io.github.thdudk.restrictions.NoMultiEdgesRestriction;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -44,7 +45,6 @@ class GraphBuilderTest {
         assertEquals(4, builder.build().getNodes().size());
         assertEquals(Set.of(1, 2, 3), new HashSet<>(builder.build().getNodeDataMap().values()));
     }
-
     @ParameterizedTest
     @MethodSource("implementationsToTest")
     void addDirEdge(GraphBuilder<Integer> builder) {
@@ -76,6 +76,21 @@ class GraphBuilderTest {
             () -> assertEquals(Set.of(one, three), builder.build().getNeighbours(two)),
             () -> assertEquals(Set.of(two), builder.build().getNeighbours(three))
         );
+    }
+
+    @ParameterizedTest
+    @MethodSource("implementationsToTest")
+    void enforcesRestrictions(GraphBuilder<Integer> builder) {
+        builder.addRestriction(new NoMultiEdgesRestriction<>()); // should fail
+        builder.addRestriction(new DirectedRestriction<>()); // should succeed
+
+        NodeID one = builder.addNode(1);
+        NodeID two = builder.addNode(2);
+        // add a multi-edge
+        builder.addDirEdge(one, two);
+        builder.addDirEdge(one, two);
+
+        assertThrows(RuntimeException.class, builder::build);
     }
 
     public static Collection<GraphBuilder<Integer>> implementationsToTest() {

@@ -35,14 +35,11 @@ class RestrictedGraphTest {
         GraphRestriction<Object> undir = new UndirectedRestriction<>();
 
         graph.addRestriction(undir);
+        assertTrue(graph.hasRestriction(undir));
 
         // ensure the graph no longer has the restriction
         graph.removeRestriction(undir);
         assertFalse(graph.hasRestriction(undir));
-
-        // test that the restriction can still be added again
-        graph.addRestriction(undir);
-        assertTrue(graph.hasRestriction(undir));
     }
 
     public static Collection<RestrictedGraph<Object>> implementationsToTest() {

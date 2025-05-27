@@ -1,6 +1,7 @@
 package io.github.thdudk.graphs.weighted;
 
 import io.github.thdudk.AbstractWeightedRestrictedGraph;
+import io.github.thdudk.graphs.AbstractStructurelessWeightedGraph;
 import io.github.thdudk.graphs.TwoWayDataContainer;
 import io.github.thdudk.ids.EdgeID;
 import io.github.thdudk.ids.NodeID;
@@ -17,17 +18,12 @@ import java.util.stream.Collectors;
 
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class AdjacencyListWeightedGraphImpl<N, E> extends AbstractWeightedRestrictedGraph<N, E> implements WeightedGraph<N, E> {
-    private final Map<NodeID, Set<EdgeEndpointPair>> adjacencyList;
-    private final TwoWayDataContainer<NodeID, N> nodeData;
-    private final TwoWayDataContainer<EdgeID, E> edgeData;
+public class AdjacencyListWeightedGraphImpl<N, E> extends AbstractStructurelessWeightedGraph<N, E> implements WeightedGraph<N, E> {
+    private final Map<NodeID, Collection<EdgeEndpointPair>> adjacencyList;
 
-    public AdjacencyListWeightedGraphImpl(Collection<GraphRestriction<N>> restrictions, Collection<GraphEdgeRestriction<N, E>> edgeRestrictions, Map<NodeID, Set<EdgeEndpointPair>> adjacencyList, Map<NodeID, N> nodeData, Map<EdgeID, E> edgeData) {
-        super(restrictions, edgeRestrictions);
+    public AdjacencyListWeightedGraphImpl(Collection<GraphRestriction<N>> restrictions, Collection<GraphEdgeRestriction<N, E>> edgeRestrictions, Map<NodeID, Collection<EdgeEndpointPair>> adjacencyList, Map<NodeID, N> nodeData, Map<EdgeID, E> edgeData) {
+        super(nodeData, edgeData, restrictions, edgeRestrictions);
         this.adjacencyList = adjacencyList;
-
-        this.nodeData = new TwoWayDataContainer<>(nodeData);
-        this.edgeData = new TwoWayDataContainer<>(edgeData);
 
         throwIfRestrictionsNotSatisfied();
         throwIfEdgeRestrictionsNotSatisfied(this);
@@ -48,22 +44,5 @@ public class AdjacencyListWeightedGraphImpl<N, E> extends AbstractWeightedRestri
             .filter(a -> a.getEndpoint().equals(end))
             .map(EdgeEndpointPair::getEdge)
             .collect(Collectors.toUnmodifiableSet());
-    }
-
-    @Override
-    public N getNodeData(NodeID id) {
-        return nodeData.getData(id);
-    }
-    @Override
-    public Collection<NodeID> nodeIdsWithData(N data) {
-        return nodeData.getIDs(data);
-    }
-    @Override
-    public E getEdgeData(EdgeID id) {
-        return edgeData.getData(id);
-    }
-    @Override
-    public Collection<EdgeID> edgeIdsWithData(E data) {
-        return edgeData.getIDs(data);
     }
 }

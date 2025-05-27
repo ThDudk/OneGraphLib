@@ -22,14 +22,10 @@ public class NodeMaskSubgraph {
             builder.addNode(id, graph.getNodeData(id));
         }
 
-        for(NodeID node : mask) {
-            for(NodeID neighbour : graph.getNeighbours(node)) {
-                for(EdgeID edgeID : graph.getEdgesBetween(node, neighbour)) {
-                    if(!mask.contains(neighbour)) continue;
+        for(Graph.EdgeDescriptor edge : graph.getEdgeDescriptors()) {
+            if(!mask.contains(edge.end())) continue;
 
-                    builder.addDirEdge(node, neighbour, edgeID);
-                }
-            }
+            builder.addDirEdge(edge.start(), edge.end(), edge.id());
         }
 
         Graph<N> subgraph = builder.build();

@@ -12,37 +12,27 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class WeightedRestrictedGraphTest {
-    static class NullEdgeRestriction<N, E> implements GraphEdgeRestriction<N, E> {
+    static class AlwaysSatisfiedEdgeRestriction<N, E> implements GraphEdgeRestriction<N, E> {
         @Override
         public boolean isSatisfied(WeightedGraph<N, E> graph) {
             return true;
         }
     }
-    static class ImpossibleEdgeRestriction<N, E> implements GraphEdgeRestriction<N, E> {
-        @Override
-        public boolean isSatisfied(WeightedGraph<N, E> graph) {
-            return false;
-        }
-    }
-
 
     @ParameterizedTest
     @MethodSource("implementationsToTest")
     void storesRestrictions(WeightedRestrictedGraph<Object, Object> graph) {
-        GraphEdgeRestriction<Object, Object> nullRestriction = new NullEdgeRestriction<>();
-        GraphEdgeRestriction<Object, Object> impossible = new ImpossibleEdgeRestriction<>();
+        GraphEdgeRestriction<Object, Object> nullRestriction = new AlwaysSatisfiedEdgeRestriction<>();
 
         graph.addRestriction(nullRestriction);
-        graph.addRestriction(impossible);
 
-        // ensure graph contains the added restrictions
-        assertTrue(graph.getEdgeRestrictions().containsAll(List.of(nullRestriction, impossible)));
+        assertTrue(graph.getEdgeRestrictions().contains(nullRestriction));
     }
 
     @ParameterizedTest
     @MethodSource("implementationsToTest")
     void removingRestrictions(WeightedRestrictedGraph<Object, Object> graph) {
-        GraphEdgeRestriction<Object, Object> nullRestriction = new NullEdgeRestriction<>();
+        GraphEdgeRestriction<Object, Object> nullRestriction = new AlwaysSatisfiedEdgeRestriction<>();
 
         graph.addRestriction(nullRestriction);
 

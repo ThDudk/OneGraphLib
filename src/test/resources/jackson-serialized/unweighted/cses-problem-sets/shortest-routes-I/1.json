@@ -1,17 +1,13 @@
 {
-  "restrictions" : [ ],
+  "restrictions" : [ {
+    "type" : "DISTINCT_DATA"
+  } ],
   "nodes" : [ {
     "id" : {
       "type" : "INT",
-      "id" : 10
+      "id" : 7
     },
-    "data" : "1"
-  }, {
-    "id" : {
-      "type" : "INT",
-      "id" : 9
-    },
-    "data" : "3"
+    "data" : "6"
   }, {
     "id" : {
       "type" : "INT",
@@ -21,33 +17,21 @@
   }, {
     "id" : {
       "type" : "INT",
-      "id" : 7
+      "id" : 9
     },
-    "data" : "6"
+    "data" : "3"
   }, {
     "id" : {
       "type" : "INT",
-      "id" : 6
+      "id" : 10
     },
-    "data" : "4"
+    "data" : "1"
   }, {
     "id" : {
       "type" : "INT",
-      "id" : 5
+      "id" : 1
     },
-    "data" : "7"
-  }, {
-    "id" : {
-      "type" : "INT",
-      "id" : 4
-    },
-    "data" : "10"
-  }, {
-    "id" : {
-      "type" : "INT",
-      "id" : 3
-    },
-    "data" : "9"
+    "data" : "8"
   }, {
     "id" : {
       "type" : "INT",
@@ -57,22 +41,53 @@
   }, {
     "id" : {
       "type" : "INT",
-      "id" : 1
+      "id" : 3
     },
-    "data" : "8"
+    "data" : "9"
+  }, {
+    "id" : {
+      "type" : "INT",
+      "id" : 4
+    },
+    "data" : "10"
+  }, {
+    "id" : {
+      "type" : "INT",
+      "id" : 5
+    },
+    "data" : "7"
+  }, {
+    "id" : {
+      "type" : "INT",
+      "id" : 6
+    },
+    "data" : "4"
   } ],
   "edges" : [ {
     "start" : {
       "type" : "INT",
-      "id" : 10
+      "id" : 7
     },
     "end" : {
       "type" : "INT",
-      "id" : 8
+      "id" : 5
     },
     "id" : {
       "type" : "LONG",
-      "id" : 16
+      "id" : 18
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 8
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 9
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 17
     }
   }, {
     "start" : {
@@ -116,46 +131,33 @@
   }, {
     "start" : {
       "type" : "INT",
-      "id" : 8
+      "id" : 10
     },
     "end" : {
       "type" : "INT",
-      "id" : 9
+      "id" : 8
     },
     "id" : {
       "type" : "LONG",
-      "id" : 17
+      "id" : 16
     }
   }, {
     "start" : {
       "type" : "INT",
+      "id" : 1
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 3
+    },
+    "id" : {
+      "type" : "LONG",
       "id" : 7
-    },
-    "end" : {
-      "type" : "INT",
-      "id" : 5
-    },
-    "id" : {
-      "type" : "LONG",
-      "id" : 18
     }
   }, {
     "start" : {
       "type" : "INT",
-      "id" : 6
-    },
-    "end" : {
-      "type" : "INT",
-      "id" : 8
-    },
-    "id" : {
-      "type" : "LONG",
-      "id" : 11
-    }
-  }, {
-    "start" : {
-      "type" : "INT",
-      "id" : 6
+      "id" : 1
     },
     "end" : {
       "type" : "INT",
@@ -163,38 +165,51 @@
     },
     "id" : {
       "type" : "LONG",
-      "id" : 9
-    }
-  }, {
-    "start" : {
-      "type" : "INT",
-      "id" : 5
-    },
-    "end" : {
-      "type" : "INT",
-      "id" : 3
-    },
-    "id" : {
-      "type" : "LONG",
-      "id" : 3
-    }
-  }, {
-    "start" : {
-      "type" : "INT",
-      "id" : 5
-    },
-    "end" : {
-      "type" : "INT",
       "id" : 1
-    },
-    "id" : {
-      "type" : "LONG",
-      "id" : 6
     }
   }, {
     "start" : {
       "type" : "INT",
-      "id" : 5
+      "id" : 2
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 9
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 12
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 2
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 6
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 15
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 2
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 7
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 10
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 3
     },
     "end" : {
       "type" : "INT",
@@ -202,7 +217,20 @@
     },
     "id" : {
       "type" : "LONG",
-      "id" : 8
+      "id" : 2
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 3
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 1
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 4
     }
   }, {
     "start" : {
@@ -233,7 +261,33 @@
   }, {
     "start" : {
       "type" : "INT",
+      "id" : 5
+    },
+    "end" : {
+      "type" : "INT",
       "id" : 3
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 3
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 5
+    },
+    "end" : {
+      "type" : "INT",
+      "id" : 4
+    },
+    "id" : {
+      "type" : "LONG",
+      "id" : 8
+    }
+  }, {
+    "start" : {
+      "type" : "INT",
+      "id" : 5
     },
     "end" : {
       "type" : "INT",
@@ -241,64 +295,25 @@
     },
     "id" : {
       "type" : "LONG",
-      "id" : 4
+      "id" : 6
     }
   }, {
     "start" : {
-      "type" : "INT",
-      "id" : 3
-    },
-    "end" : {
-      "type" : "INT",
-      "id" : 4
-    },
-    "id" : {
-      "type" : "LONG",
-      "id" : 2
-    }
-  }, {
-    "start" : {
-      "type" : "INT",
-      "id" : 2
-    },
-    "end" : {
-      "type" : "INT",
-      "id" : 9
-    },
-    "id" : {
-      "type" : "LONG",
-      "id" : 12
-    }
-  }, {
-    "start" : {
-      "type" : "INT",
-      "id" : 2
-    },
-    "end" : {
-      "type" : "INT",
-      "id" : 7
-    },
-    "id" : {
-      "type" : "LONG",
-      "id" : 10
-    }
-  }, {
-    "start" : {
-      "type" : "INT",
-      "id" : 2
-    },
-    "end" : {
       "type" : "INT",
       "id" : 6
     },
+    "end" : {
+      "type" : "INT",
+      "id" : 8
+    },
     "id" : {
       "type" : "LONG",
-      "id" : 15
+      "id" : 11
     }
   }, {
     "start" : {
       "type" : "INT",
-      "id" : 1
+      "id" : 6
     },
     "end" : {
       "type" : "INT",
@@ -306,20 +321,7 @@
     },
     "id" : {
       "type" : "LONG",
-      "id" : 1
-    }
-  }, {
-    "start" : {
-      "type" : "INT",
-      "id" : 1
-    },
-    "end" : {
-      "type" : "INT",
-      "id" : 3
-    },
-    "id" : {
-      "type" : "LONG",
-      "id" : 7
+      "id" : 9
     }
   } ]
 }

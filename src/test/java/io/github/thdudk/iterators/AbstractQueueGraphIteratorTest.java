@@ -17,7 +17,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AbstractQueueGraphIteratorTest {
-    static Graph<Integer> graph = TestGraphs.getCSESShortestRoutesIGraphNum(1);
+    static Graph<Integer> graph = TestGraphs.getCSESShortestRoutesIUnweightedGraph(1);
 
     @ParameterizedTest
     @MethodSource("implementationsToTest")

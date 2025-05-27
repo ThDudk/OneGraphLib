@@ -1,10 +1,14 @@
 package io.github.thdudk.graphs;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 import java.util.*;
 
+@ToString
+@EqualsAndHashCode
 public class TwoWayDataContainer<ID, DATA> {
     @RequiredArgsConstructor
     @Getter

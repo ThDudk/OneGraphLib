@@ -1,10 +1,7 @@
 package io.github.thdudk.graphs.unweighted;
 
-import com.fasterxml.jackson.annotation.JacksonInject;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JacksonStdImpl;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.github.thdudk.RestrictedGraph;
 import io.github.thdudk.builders.unweighted.ExplicitIdsGraphBuilderImpl;
@@ -12,7 +9,6 @@ import io.github.thdudk.ids.EdgeID;
 import io.github.thdudk.ids.NodeID;
 import io.github.thdudk.restrictions.GraphRestriction;
 import lombok.Value;
-import lombok.extern.jackson.Jacksonized;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -51,12 +47,13 @@ public interface Graph<N> extends RestrictedGraph<N> {
     /// @return all out-neighbours of node
     /// @throws IllegalArgumentException If `node` is not contained in this
     Collection<NodeID> getNeighbours(NodeID node);
-
     /// If start and end are not neighbours, an empty set should be returned.
     ///
     /// @return the data of all edges between start and end.
     Collection<EdgeID> getEdgesBetween(NodeID start, NodeID end);
-
+    default Optional<EdgeID> getAnyEdgeBetween(NodeID start, NodeID end) {
+        return getEdgesBetween(start, end).stream().findAny();
+    }
     /// Returns all nodes with an edge going into node.
     /// This includes undirected edges.
     ///
@@ -70,7 +67,6 @@ public interface Graph<N> extends RestrictedGraph<N> {
 
         return nodes;
     }
-
     default int getDegree(NodeID node) {
         return getNeighbours(node).size();
     }
@@ -78,18 +74,34 @@ public interface Graph<N> extends RestrictedGraph<N> {
         return getInNeighbours(node).size();
     }
 
+    @JsonIgnore
+    default Map<NodeID, Collection<EdgeEndpointPair>> getAdjacencyList() {
+        Map<NodeID, Collection<EdgeEndpointPair>> adjacencyList = new HashMap<>();
+
+        for(NodeID node : getNodes()) {
+            adjacencyList.put(node, new HashSet<>());
+        }
+
+        for(EdgeDescriptor edge : getEdgeDescriptors()) {
+            adjacencyList.get(edge.start()).add(new EdgeEndpointPair(edge.id(), edge.end()));
+        }
+
+        return adjacencyList;
+    }
+
+    // -- Node data functions --
     N getNodeData(NodeID id);
     /// If the data is found in multiple places, a random instance is picked
     Collection<NodeID> nodeIdsWithData(N data);
     default NodeID anyNodeIdWithData(N data) {
         return nodeIdsWithData(data).stream().findAny().orElseThrow();
     };
-
     @JsonIgnore
     default Map<NodeID, N> getNodeDataMap() {
         return getNodeDescriptors().stream().collect(Collectors.toMap(NodeDescriptor::id, NodeDescriptor::data));
     }
 
+    // -- serialization functions --
     @JsonProperty("nodes")
     default Collection<NodeDescriptor<N>> getNodeDescriptors() {
         Collection<NodeDescriptor<N>> collection = new ArrayList<>();
@@ -111,6 +123,13 @@ public interface Graph<N> extends RestrictedGraph<N> {
         return collection;
     }
 
+    // -- restriction functions --
+
+    /// adds a restriction to this
+    ///
+    /// @Throws RuntimeException if this does not satisfy restriction
+    @Override
+    Graph<N> addRestriction(GraphRestriction<N> restriction);
     default void throwIfRestrictionsNotSatisfied() {
         List<GraphRestriction<N>> unsatisfied = getRestrictions().stream().filter(a -> !a.isSatisfied(this)).toList();
 
@@ -118,8 +137,9 @@ public interface Graph<N> extends RestrictedGraph<N> {
     }
     default void addSatisfiedRestrictions(Collection<GraphRestriction<N>> restrictions) {
         for(GraphRestriction<N> restriction : restrictions) {
-            if(!restriction.isSatisfied(this)) continue;
-            addRestriction(restriction);
+            try {
+                addRestriction(restriction);
+            } catch (RuntimeException ignore) {}
         }
     }
 }

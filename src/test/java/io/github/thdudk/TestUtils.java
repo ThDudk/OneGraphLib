@@ -4,18 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.thdudk.builders.unweighted.DistinctDataGraphBuilder;
 import io.github.thdudk.builders.unweighted.DistinctDataGraphBuilderImpl;
 import io.github.thdudk.graphs.unweighted.Graph;
+import io.github.thdudk.serialization.GraphVizExporter;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 public abstract class TestUtils {
-    // used quickly to generate jackson serialized instances of the CSES Shortest Routes I graphs
-    public static void main(String[] args) throws IOException {
-        doTheThing(1);
+    public static void main(String[] args) throws Exception {
+        System.out.println(GraphVizExporter.serialize(TestGraphs.getCSESShortestRoutesIUnweightedGraph(1)));
     }
-    static void doTheThing(int num) throws IOException {
+
+    static void serializeCSESAsUnweightedTestGraph(int num) throws IOException {
         // read in graph
         DistinctDataGraphBuilder<String> builder = new DistinctDataGraphBuilderImpl<>();
         BufferedReader reader = new BufferedReader(new FileReader("src/test/resources/raw/cses-problem-sets/shortest-routes-I/" + num + ".in"));
@@ -31,6 +29,6 @@ public abstract class TestUtils {
 
         // convert to JSON format
         ObjectMapper mapper = new ObjectMapper();
-        mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/test/resources/jackson-serialized/cses-problem-sets/shortest-routes-I/unweighted/" + num + ".json"), graph);
+        mapper.writerWithDefaultPrettyPrinter().writeValue(new File("src/test/resources/jackson-serialized/unweighted/cses-problem-sets/shortest-routes-I/" + num + ".json"), graph);
     }
 }

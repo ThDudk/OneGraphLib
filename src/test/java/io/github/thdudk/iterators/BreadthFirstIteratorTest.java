@@ -12,7 +12,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BreadthFirstIteratorTest {
-    static Graph<Integer> graph = TestGraphs.getCSESShortestRoutesIGraphNum(1);
+    static Graph<Integer> graph = TestGraphs.getCSESShortestRoutesIUnweightedGraph(1);
 
     @Test
     void testOrder() {

@@ -4,6 +4,7 @@ import io.github.thdudk.builders.weighted.WeightedGraphBuilder;
 import io.github.thdudk.builders.weighted.WeightedGraphBuilderImpl;
 import io.github.thdudk.graphs.weighted.WeightedGraph;
 import io.github.thdudk.ids.NodeID;
+import io.github.thdudk.serialization.GraphVizExporter;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -24,6 +25,8 @@ class WeightedGraphBuilderTest {
         NodeID one = builder.addNode(1);
         NodeID two = builder.addNode(2);
         NodeID three = builder.addNode(3);
+        System.out.println(builder.build());
+        System.out.println(builder);
         assertEquals(Set.of(one, two, three), new HashSet<>(builder.build().getNodes()));
         assertEquals(Set.of(1, 2, 3), new HashSet<>(builder.build().getNodeDataMap().values()));
 
@@ -54,7 +57,7 @@ class WeightedGraphBuilderTest {
 
         // assert that duplicate edges are added
         builder.addDirEdge(one, two, 4);
-        assertEquals(List.of(4, 4), graph.getEdgesBetween(one, two).stream().map(graph::getEdgeData).toList());
+        assertEquals(List.of(4, 4), builder.build().getEdgesBetween(one, two).stream().map(graph::getEdgeData).toList());
     }
     @ParameterizedTest
     @MethodSource("implementationsToTest")
@@ -78,7 +81,7 @@ class WeightedGraphBuilderTest {
 
         // assert that duplicate edges are added
         builder.addUndirEdge(one, two, 4);
-        assertEquals(List.of(4, 4), graph.getEdgesBetween(one, two).stream().map(graph::getEdgeData).toList());
+        assertEquals(List.of(4, 4), builder.build().getEdgesBetween(one, two).stream().map(graph::getEdgeData).toList());
     }
 
     public static Collection<WeightedGraphBuilder<Integer, Integer>> implementationsToTest() {

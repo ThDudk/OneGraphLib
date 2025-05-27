@@ -1,10 +1,13 @@
 package io.github.thdudk.builders.paths;
 
 import io.github.thdudk.builders.unweighted.ExplicitIdsGraphBuilderImpl;
+import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.graphs.unweighted.PathGraph;
 import io.github.thdudk.graphs.unweighted.PathGraphImpl;
 import io.github.thdudk.ids.EdgeID;
 import io.github.thdudk.ids.NodeID;
+
+import java.util.Collection;
 
 public class PathBuilderImpl<N> extends ExplicitIdsGraphBuilderImpl<N> implements PathBuilder<N> {
     private NodeID root;

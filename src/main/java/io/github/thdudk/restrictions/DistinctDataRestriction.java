@@ -1,20 +1,19 @@
 package io.github.thdudk.restrictions;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.github.thdudk.graphs.unweighted.Graph;
-import io.github.thdudk.ids.NodeID;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.HashMap;
+import java.util.HashSet;
+
 @EqualsAndHashCode
 @ToString
-public class UndirectedRestriction<N> implements GraphRestriction<N>{
+public class DistinctDataRestriction<N> implements GraphRestriction<N> {
     @Override
     public boolean isSatisfied(Graph<N> graph) {
-        for(NodeID node : graph.getNodes())
-            if(!graph.getInNeighbours(node).equals(graph.getNeighbours(node)))
-                return false;
-
-        return true;
+        return graph.getNodeDataMap().size() == new HashSet<>(graph.getNodeDataMap().values()).size();
     }
 }

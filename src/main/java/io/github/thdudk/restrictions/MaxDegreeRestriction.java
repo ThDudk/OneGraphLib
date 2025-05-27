@@ -1,10 +1,15 @@
 package io.github.thdudk.restrictions;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.ids.NodeID;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @RequiredArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class MaxDegreeRestriction<N> implements GraphRestriction<N> {
     private final int maxDegree;
 

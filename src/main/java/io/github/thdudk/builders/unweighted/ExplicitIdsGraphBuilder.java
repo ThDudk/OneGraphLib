@@ -20,12 +20,18 @@ public interface ExplicitIdsGraphBuilder<N> extends RestrictedGraph<N> {
     void addDirEdge(NodeID root, NodeID neighbor, EdgeID edgeID);
     /// Adds an undirected-edge (two-way) between `node1` and `node2`
     ///
-    /// `oneToTwo` and `twoToOne` MUST BE DISTINCT.
+    /// Because graphs cannot represent undirected edges, oneToTwo and twoToOne must be distinct to avoid ID conflicts.
+    ///
+    /// @throws IllegalArgumentException if oneToTwo and twoToOne are not distinct
     default void addUndirEdge(NodeID node1, NodeID node2, EdgeID oneToTwo, EdgeID twoToOne) {
         if(oneToTwo.equals(twoToOne)) throw new IllegalArgumentException("oneToTwo and twoToOne must be distinct");
 
         addDirEdge(node1, node2, oneToTwo);
         addDirEdge(node2, node1, twoToOne);
+    }
+
+    static <N> ExplicitIdsGraphBuilder<N> copyOf(Graph<N> graph) {
+        return new ExplicitIdsGraphBuilderImpl<>(graph);
     }
 
     Graph<N> build();

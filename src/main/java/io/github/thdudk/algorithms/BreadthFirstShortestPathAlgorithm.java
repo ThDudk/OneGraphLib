@@ -4,12 +4,11 @@ import io.github.thdudk.builders.paths.PathBuilder;
 import io.github.thdudk.builders.paths.PathBuilderImpl;
 import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.graphs.unweighted.PathGraph;
+import io.github.thdudk.ids.EdgeID;
 import io.github.thdudk.ids.NodeID;
 import io.github.thdudk.iterators.node.BreadthFirstIterator;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class BreadthFirstShortestPathAlgorithm implements ShortestPathAlgorithm {
     @Override
@@ -32,16 +31,24 @@ public class BreadthFirstShortestPathAlgorithm implements ShortestPathAlgorithm 
 
     private <N> PathGraph<N> backtrack(Graph<N> graph, NodeID start, NodeID end, Map<NodeID, NodeID> parentTree) {
         NodeID curr = end;
-        PathBuilder<N> pathBuilder = new PathBuilderImpl<>();
-        pathBuilder.addNode(curr, graph.getNodeData(curr));
+        List<NodeID> path = new ArrayList<>();
+        path.add(curr);
 
-        while(true) {
+        while(!curr.equals(start)) {
             curr = parentTree.get(curr);
-            pathBuilder.addNode(curr, graph.getNodeData(curr));
-
-            if(curr.equals(start)) {
-                return pathBuilder.build();
-            }
+            path.add(curr);
         }
+
+        path = path.reversed();
+
+        PathBuilder<N> pathBuilder = new PathBuilderImpl<>();
+        pathBuilder.addStartNode(path.getFirst(), graph.getNodeData(path.getFirst()));
+
+        for(int i = 1; i < path.size(); i++) {
+            EdgeID edge = graph.getAnyEdgeBetween(path.get(i - 1), path.get(i)).orElseThrow();
+            pathBuilder.nextNode(path.get(i), graph.getNodeData(path.get(i)), edge);
+        }
+
+        return pathBuilder.build();
     }
 }

@@ -46,7 +46,6 @@ public class ExplicitIdsWeightedGraphBuilderImpl<N, E> extends AbstractWeightedR
     @Override
     public WeightedGraph<N, E> build() {
         Graph<N> graph = graphBuilder.build();
-        return null; // TODO fix
-//        return new AdjacencyListWeightedGraphImpl<N, E>(getRestrictions(), getEdgeRestrictions(), graph.getAdjacencyList(), graph.getNodeDataMap(), edgeData);
+        return new AdjacencyListWeightedGraphImpl<>(getRestrictions(), getEdgeRestrictions(), graph.getAdjacencyList(), graph.getNodeDataMap(), edgeData);
     }
 }

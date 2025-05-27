@@ -4,9 +4,10 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.github.thdudk.graphs.unweighted.Graph;
 
-@JsonTypeInfo(use= JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonTypeInfo(use= JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
     @JsonSubTypes.Type(value = DirectedRestriction.class, name = "DIRECTED"),
+    @JsonSubTypes.Type(value = DistinctDataRestriction.class, name = "DISTINCT_DATA"),
     @JsonSubTypes.Type(value = UndirectedRestriction.class, name = "UNDIRECTED"),
     @JsonSubTypes.Type(value = MaxDegreeRestriction.class, name = "MAX_DEGREE"),
     @JsonSubTypes.Type(value = NoMultiEdgesRestriction.class, name = "NO_MULTI_EDGES"),
