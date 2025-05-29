@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+/// Limits the graph to only have nodes with a max degree of `maxDegree` (inclusive)
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
