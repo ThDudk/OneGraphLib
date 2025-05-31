@@ -1,16 +1,16 @@
 package io.github.thdudk.builders.unweighted;
 
-import io.github.thdudk.RestrictedGraph;
 import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.ids.EdgeID;
 import io.github.thdudk.ids.NodeID;
+import io.github.thdudk.restrictions.restriction_containers.MutableRestrictionContainer;
 
 /// Graph builder that involves manually managing your own NodeIDs.
 ///
 /// This is useful in constructing graphs related to other graphs (such as paths or trees), in which sharing NodeIDs is important.
 ///
 /// It's also useful when custom NodeIDs are being used, such as coordinate node IDs.
-public interface ExplicitIdsGraphBuilder<N> extends RestrictedGraph<N> {
+public interface ExplicitIdsGraphBuilder<N> extends MutableRestrictionContainer<N> {
     /// Adds the node while preserving its NodeID.
     ///
     /// @throws IllegalArgumentException if id is already present

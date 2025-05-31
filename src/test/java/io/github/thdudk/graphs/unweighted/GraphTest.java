@@ -13,25 +13,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 class GraphTest {
-    @Test
-    void enforcesRestrictions() {
-        GraphBuilder<Integer> builder = new GraphBuilderImpl<>();
-        NodeID one = builder.addNode(1);
-        NodeID two = builder.addNode(2);
-        NodeID three = builder.addNode(3);
-
-        builder.addDirEdge(one, two);
-        builder.addDirEdge(two, three);
-        builder.addDirEdge(three, one);
-
-        Graph<Integer> graph = builder.build();
-
-        assertAll(
-            () -> assertThrows(RuntimeException.class, () -> graph.addRestriction(new UndirectedRestriction<>())),
-            () -> assertDoesNotThrow(() -> graph.addRestriction(new DirectedRestriction<>()))
-        );
-    }
-
     // basic functionality is not tested as it should be caught by functional tests / test projects
 
     public static Collection<Graph<Integer>> implementationsToTest() {

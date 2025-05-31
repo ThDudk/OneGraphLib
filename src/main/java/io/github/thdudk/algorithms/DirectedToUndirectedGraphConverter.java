@@ -2,8 +2,6 @@ package io.github.thdudk.algorithms;
 
 import io.github.thdudk.builders.unweighted.ExplicitIdsGraphBuilder;
 import io.github.thdudk.builders.unweighted.ExplicitIdsGraphBuilderImpl;
-import io.github.thdudk.builders.unweighted.GraphBuilder;
-import io.github.thdudk.builders.unweighted.GraphBuilderImpl;
 import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.ids.EdgeID;
 import io.github.thdudk.ids.GeneratedEdgeID;
@@ -38,9 +36,6 @@ public class DirectedToUndirectedGraphConverter {
             }
         }
 
-        Graph<N> graph = builder.build();
-        graph.addSatisfiedRestrictions(directed.getRestrictions());
-
-        return graph;
+        return builder.build();
     }
 }

@@ -1,17 +1,23 @@
 package io.github.thdudk.builders.paths;
 
 import io.github.thdudk.builders.unweighted.ExplicitIdsGraphBuilderImpl;
-import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.graphs.unweighted.PathGraph;
 import io.github.thdudk.graphs.unweighted.PathGraphImpl;
 import io.github.thdudk.ids.EdgeID;
 import io.github.thdudk.ids.NodeID;
-
-import java.util.Collection;
+import io.github.thdudk.restrictions.DirectedRestriction;
+import io.github.thdudk.restrictions.MaxDegreeRestriction;
+import io.github.thdudk.restrictions.NoMultiEdgesRestriction;
 
 public class PathBuilderImpl<N> extends ExplicitIdsGraphBuilderImpl<N> implements PathBuilder<N> {
     private NodeID root;
     private NodeID prev;
+
+    public PathBuilderImpl() {
+        addRestriction(new NoMultiEdgesRestriction<>());
+        addRestriction(new DirectedRestriction<>());
+        addRestriction(new MaxDegreeRestriction<>(2));
+    }
 
     @Override
     public void addStartNode(NodeID node, N data) {

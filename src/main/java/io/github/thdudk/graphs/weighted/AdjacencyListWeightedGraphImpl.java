@@ -1,8 +1,6 @@
 package io.github.thdudk.graphs.weighted;
 
-import io.github.thdudk.AbstractWeightedRestrictedGraph;
 import io.github.thdudk.graphs.AbstractStructurelessWeightedGraph;
-import io.github.thdudk.graphs.TwoWayDataContainer;
 import io.github.thdudk.ids.EdgeID;
 import io.github.thdudk.ids.NodeID;
 import io.github.thdudk.restrictions.GraphEdgeRestriction;
@@ -13,7 +11,6 @@ import lombok.ToString;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @EqualsAndHashCode(callSuper = true)
@@ -24,9 +21,6 @@ public class AdjacencyListWeightedGraphImpl<N, E> extends AbstractStructurelessW
     public AdjacencyListWeightedGraphImpl(Collection<GraphRestriction<N>> restrictions, Collection<GraphEdgeRestriction<N, E>> edgeRestrictions, Map<NodeID, Collection<EdgeEndpointPair>> adjacencyList, Map<NodeID, N> nodeData, Map<EdgeID, E> edgeData) {
         super(nodeData, edgeData, restrictions, edgeRestrictions);
         this.adjacencyList = adjacencyList;
-
-        throwIfRestrictionsNotSatisfied();
-        throwIfEdgeRestrictionsNotSatisfied(this);
     }
 
     @Override

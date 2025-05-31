@@ -1,6 +1,5 @@
 package io.github.thdudk.builders.unweighted;
 
-import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.ids.NodeID;
 import io.github.thdudk.restrictions.DistinctDataRestriction;
 

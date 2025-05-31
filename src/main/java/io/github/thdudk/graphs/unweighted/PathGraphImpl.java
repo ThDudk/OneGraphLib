@@ -28,14 +28,9 @@ public class PathGraphImpl<N> extends AdjacencyListGraphImpl<N> implements PathG
         NodeID end
     ) {
         super(graphRestrictions, adjacencyList, nodeData);
-        addRestriction(new NoMultiEdgesRestriction<>());
-        addRestriction(new DirectedRestriction<>());
-        addRestriction(new MaxDegreeRestriction<>(2));
 
         this.root = root;
         this.end = end;
-
-        throwIfRestrictionsNotSatisfied();
     }
 
     @Override

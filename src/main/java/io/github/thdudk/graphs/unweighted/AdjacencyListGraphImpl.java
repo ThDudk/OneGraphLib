@@ -9,7 +9,10 @@ import io.github.thdudk.restrictions.GraphRestriction;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @EqualsAndHashCode(callSuper = true)
@@ -24,8 +27,6 @@ public class AdjacencyListGraphImpl<N> extends AbstractStructurelessGraph<N> imp
     ) {
         super(nodeData, restrictions);
         this.adjacencyList = adjacencyList;
-
-        throwIfRestrictionsNotSatisfied();
     }
 
     @Override

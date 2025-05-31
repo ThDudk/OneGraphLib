@@ -1,6 +1,5 @@
 package io.github.thdudk.restrictions;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.ids.NodeID;
 import lombok.EqualsAndHashCode;

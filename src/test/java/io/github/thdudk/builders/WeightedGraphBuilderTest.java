@@ -25,8 +25,6 @@ class WeightedGraphBuilderTest {
         NodeID one = builder.addNode(1);
         NodeID two = builder.addNode(2);
         NodeID three = builder.addNode(3);
-        System.out.println(builder.build());
-        System.out.println(builder);
         assertEquals(Set.of(one, two, three), new HashSet<>(builder.build().getNodes()));
         assertEquals(Set.of(1, 2, 3), new HashSet<>(builder.build().getNodeDataMap().values()));
 

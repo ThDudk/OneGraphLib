@@ -1,13 +1,14 @@
 package io.github.thdudk.builders.unweighted;
 
-import io.github.thdudk.AbstractRestrictedGraph;
 import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.ids.EdgeID;
 import io.github.thdudk.ids.IntNodeID;
 import io.github.thdudk.ids.LongEdgeID;
 import io.github.thdudk.ids.NodeID;
+import io.github.thdudk.restrictions.GraphRestriction;
+import io.github.thdudk.restrictions.restriction_containers.AbstractMutableRestrictionContainer;
 
-public class GraphBuilderImpl<N> extends AbstractRestrictedGraph<N> implements GraphBuilder<N> {
+public class GraphBuilderImpl<N> extends AbstractMutableRestrictionContainer<N> implements GraphBuilder<N> {
     private IntNodeID prevNode = new IntNodeID(0);
     private LongEdgeID prevEdge = new LongEdgeID(0);
     private final ExplicitIdsGraphBuilder<N> builder;

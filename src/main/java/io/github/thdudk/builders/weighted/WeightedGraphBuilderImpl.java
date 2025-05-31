@@ -1,13 +1,13 @@
 package io.github.thdudk.builders.weighted;
 
-import io.github.thdudk.AbstractWeightedRestrictedGraph;
 import io.github.thdudk.graphs.weighted.WeightedGraph;
 import io.github.thdudk.ids.EdgeID;
 import io.github.thdudk.ids.IntNodeID;
 import io.github.thdudk.ids.LongEdgeID;
 import io.github.thdudk.ids.NodeID;
+import io.github.thdudk.restrictions.restriction_containers.AbstractMutableWeightedRestrictionContainer;
 
-public class WeightedGraphBuilderImpl<N, E> extends AbstractWeightedRestrictedGraph<N, E> implements WeightedGraphBuilder<N, E> {
+public class WeightedGraphBuilderImpl<N, E> extends AbstractMutableWeightedRestrictionContainer<N, E> implements WeightedGraphBuilder<N, E> {
     private IntNodeID prevNode = new IntNodeID(0);
     private LongEdgeID prevEdge = new LongEdgeID(0);
     private final ExplicitIdsWeightedGraphBuilder<N, E> builder;

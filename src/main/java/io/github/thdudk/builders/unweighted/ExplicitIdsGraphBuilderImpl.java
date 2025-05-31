@@ -2,19 +2,18 @@ package io.github.thdudk.builders.unweighted;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.thdudk.AbstractRestrictedGraph;
 import io.github.thdudk.graphs.unweighted.AdjacencyListGraphImpl;
 import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.ids.EdgeID;
 import io.github.thdudk.ids.NodeID;
 import io.github.thdudk.restrictions.GraphRestriction;
+import io.github.thdudk.restrictions.restriction_containers.AbstractMutableRestrictionContainer;
 import lombok.NoArgsConstructor;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 @NoArgsConstructor
-public class ExplicitIdsGraphBuilderImpl<N> extends AbstractRestrictedGraph<N> implements ExplicitIdsGraphBuilder<N> {
+public class ExplicitIdsGraphBuilderImpl<N> extends AbstractMutableRestrictionContainer<N> implements ExplicitIdsGraphBuilder<N> {
     // TODO re-evaluate these guys being protected. Protected helper functions may be better
     protected final Map<NodeID, Set<Graph.EdgeEndpointPair>> adjacencyList = new HashMap<>();
     protected final Map<NodeID, N> nodeData = new HashMap<>();
@@ -78,6 +77,12 @@ public class ExplicitIdsGraphBuilderImpl<N> extends AbstractRestrictedGraph<N> i
 
     @Override
     public Graph<N> build() {
-        return new AdjacencyListGraphImpl<>(getRestrictions(), adjacencyList, nodeData);
+        Graph<N> graph = new AdjacencyListGraphImpl<>(getRestrictions(), adjacencyList, nodeData);
+
+        for(GraphRestriction<N> restriction : getRestrictions()) {
+            if(!restriction.isSatisfied(graph)) throw new RuntimeException("Graph does not satisfy restriction: " + restriction);
+        }
+
+        return graph;
     }
 }

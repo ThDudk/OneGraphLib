@@ -1,6 +1,5 @@
 package io.github.thdudk.builders.weighted;
 
-import io.github.thdudk.AbstractWeightedRestrictedGraph;
 import io.github.thdudk.builders.unweighted.ExplicitIdsGraphBuilder;
 import io.github.thdudk.builders.unweighted.ExplicitIdsGraphBuilderImpl;
 import io.github.thdudk.graphs.unweighted.Graph;
@@ -8,13 +7,14 @@ import io.github.thdudk.graphs.weighted.AdjacencyListWeightedGraphImpl;
 import io.github.thdudk.graphs.weighted.WeightedGraph;
 import io.github.thdudk.ids.EdgeID;
 import io.github.thdudk.ids.NodeID;
+import io.github.thdudk.restrictions.restriction_containers.AbstractMutableWeightedRestrictionContainer;
 import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @NoArgsConstructor
-public class ExplicitIdsWeightedGraphBuilderImpl<N, E> extends AbstractWeightedRestrictedGraph<N, E> implements ExplicitIdsWeightedGraphBuilder<N, E> {
+public class ExplicitIdsWeightedGraphBuilderImpl<N, E> extends AbstractMutableWeightedRestrictionContainer<N, E> implements ExplicitIdsWeightedGraphBuilder<N, E> {
     private final ExplicitIdsGraphBuilder<N> graphBuilder = new ExplicitIdsGraphBuilderImpl<>();
     private final Map<EdgeID, E> edgeData = new HashMap<>();
 

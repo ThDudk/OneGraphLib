@@ -41,7 +41,6 @@ class GraphBuilderTest {
 
         // assert duplicate inputs are added
         builder.addNode(1);
-        System.out.println(builder.build().getNodes());
         assertEquals(4, builder.build().getNodes().size());
         assertEquals(Set.of(1, 2, 3), new HashSet<>(builder.build().getNodeDataMap().values()));
     }

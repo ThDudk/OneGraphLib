@@ -13,7 +13,6 @@ public abstract class TestGraphs {
 
     public static void main(String[] args) {
         Graph<Integer> graph = getCSESShortestRoutesIUnweightedGraph(1);
-        System.out.println(graph);
     }
 
     @SneakyThrows(IOException.class)

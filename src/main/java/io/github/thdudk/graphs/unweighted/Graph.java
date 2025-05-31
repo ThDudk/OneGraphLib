@@ -3,11 +3,10 @@ package io.github.thdudk.graphs.unweighted;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import io.github.thdudk.RestrictedGraph;
 import io.github.thdudk.builders.unweighted.ExplicitIdsGraphBuilderImpl;
 import io.github.thdudk.ids.EdgeID;
 import io.github.thdudk.ids.NodeID;
-import io.github.thdudk.restrictions.GraphRestriction;
+import io.github.thdudk.restrictions.restriction_containers.RestrictionContainer;
 import lombok.Value;
 
 import java.util.*;
@@ -15,7 +14,7 @@ import java.util.stream.Collectors;
 
 /// @param <N> The Type of the nodes contained in the graph
 @JsonDeserialize(builder = ExplicitIdsGraphBuilderImpl.class)
-public interface Graph<N> extends RestrictedGraph<N> {
+public interface Graph<N> extends RestrictionContainer<N> {
     /// Pair of an edge and it's endpoint
     @Value
     class EdgeEndpointPair {
@@ -121,25 +120,5 @@ public interface Graph<N> extends RestrictedGraph<N> {
             }
         }
         return collection;
-    }
-
-    // -- restriction functions --
-
-    /// adds a restriction to this
-    ///
-    /// @Throws RuntimeException if this does not satisfy restriction
-    @Override
-    Graph<N> addRestriction(GraphRestriction<N> restriction);
-    default void throwIfRestrictionsNotSatisfied() {
-        List<GraphRestriction<N>> unsatisfied = getRestrictions().stream().filter(a -> !a.isSatisfied(this)).toList();
-
-        if(!unsatisfied.isEmpty()) throw new RuntimeException("Graph failed to satisfy restrictions: " + unsatisfied);
-    }
-    default void addSatisfiedRestrictions(Collection<GraphRestriction<N>> restrictions) {
-        for(GraphRestriction<N> restriction : restrictions) {
-            try {
-                addRestriction(restriction);
-            } catch (RuntimeException ignore) {}
-        }
     }
 }

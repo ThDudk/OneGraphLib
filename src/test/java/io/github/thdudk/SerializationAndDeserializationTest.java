@@ -31,11 +31,6 @@ public class SerializationAndDeserializationTest {
         builder.addDirEdge(1, 2);
 
         Graph<Integer> graph = builder.build();
-        Collection<GraphRestriction<Integer>> restrictions = graph.getRestrictions();
-
-        for (GraphRestriction<Integer> restriction : restrictions) {
-            graph.removeRestriction(restriction);
-        }
 
         ObjectMapper mapper = new ObjectMapper();
         String serialized = mapper.writeValueAsString(graph);

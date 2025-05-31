@@ -1,9 +1,9 @@
 package io.github.thdudk.graphs.weighted;
 
-import io.github.thdudk.WeightedRestrictedGraph;
 import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.ids.EdgeID;
 import io.github.thdudk.ids.NodeID;
+import io.github.thdudk.restrictions.restriction_containers.WeightedRestrictionContainer;
 
 import java.util.Collection;
 
@@ -12,7 +12,7 @@ import java.util.Collection;
  * @param <N> Type of the nodes contained in the graph
  * @param <E> Type of the edges contained in the graph
  */
-public interface WeightedGraph<N, E> extends Graph<N>, WeightedRestrictedGraph<N, E> {
+public interface WeightedGraph<N, E> extends Graph<N>, WeightedRestrictionContainer<N, E> {
     /// If start and end are not neighbours, an empty set should be returned.
     ///
     /// @return the data of all edges between start and end.

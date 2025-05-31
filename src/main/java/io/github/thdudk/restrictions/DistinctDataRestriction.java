@@ -1,12 +1,9 @@
 package io.github.thdudk.restrictions;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.github.thdudk.graphs.unweighted.Graph;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.HashMap;
 import java.util.HashSet;
 
 @EqualsAndHashCode

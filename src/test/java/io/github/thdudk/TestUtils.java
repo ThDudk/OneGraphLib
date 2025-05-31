@@ -10,7 +10,7 @@ import java.io.*;
 
 public abstract class TestUtils {
     public static void main(String[] args) throws Exception {
-        System.out.println(GraphVizExporter.serialize(TestGraphs.getCSESShortestRoutesIUnweightedGraph(1)));
+//        System.out.println(GraphVizExporter.serialize(TestGraphs.getCSESShortestRoutesIUnweightedGraph(1)));
     }
 
     static void serializeCSESAsUnweightedTestGraph(int num) throws IOException {
@@ -19,11 +19,8 @@ public abstract class TestUtils {
         BufferedReader reader = new BufferedReader(new FileReader("src/test/resources/raw/cses-problem-sets/shortest-routes-I/" + num + ".in"));
         reader.readLine();
 
-        int lineNum = 0;
         for(String[] line : reader.lines().map(a -> a.split(" ")).toList()) {
             builder.addDirEdge(line[0], line[1]);
-            if(lineNum % 10000 == 0) System.out.println("finished: " + lineNum);
-            lineNum++;
         }
         Graph<String> graph = builder.build();
 
