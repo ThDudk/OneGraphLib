@@ -1,11 +1,8 @@
-package io.github.thdudk.iterators;
+package io.github.thdudk.iterators.node;
 
 import io.github.thdudk.TestGraphs;
 import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.ids.NodeID;
-import io.github.thdudk.iterators.node.AbstractQueueGraphIterator;
-import io.github.thdudk.iterators.node.BreadthFirstIterator;
-import io.github.thdudk.iterators.node.DepthFirstIterator;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 

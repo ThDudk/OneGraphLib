@@ -46,13 +46,6 @@ public interface Graph<N> extends RestrictionContainer<N> {
     /// @return all out-neighbours of node
     /// @throws IllegalArgumentException If `node` is not contained in this
     Collection<NodeID> getNeighbours(NodeID node);
-    /// If start and end are not neighbours, an empty set should be returned.
-    ///
-    /// @return the data of all edges between start and end.
-    Collection<EdgeID> getEdgesBetween(NodeID start, NodeID end);
-    default Optional<EdgeID> getAnyEdgeBetween(NodeID start, NodeID end) {
-        return getEdgesBetween(start, end).stream().findAny();
-    }
     /// Returns all nodes with an edge going into node.
     /// This includes undirected edges.
     ///
@@ -66,6 +59,15 @@ public interface Graph<N> extends RestrictionContainer<N> {
 
         return nodes;
     }
+
+    /// If start and end are not neighbours, an empty set should be returned.
+    ///
+    /// @return the data of all edges between start and end.
+    Collection<EdgeID> getEdgesBetween(NodeID start, NodeID end);
+    default Optional<EdgeID> getAnyEdgeBetween(NodeID start, NodeID end) {
+        return getEdgesBetween(start, end).stream().findAny();
+    }
+
     default int getDegree(NodeID node) {
         return getNeighbours(node).size();
     }

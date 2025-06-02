@@ -1,7 +1,7 @@
 package io.github.thdudk.graphs.unweighted;
 
 import io.github.thdudk.ids.NodeID;
-import io.github.thdudk.iterators.GraphIterator;
+import io.github.thdudk.iterators.GraphNodeIterator;
 import io.github.thdudk.iterators.node.DepthFirstIterator;
 import io.github.thdudk.restrictions.*;
 import lombok.EqualsAndHashCode;
@@ -31,7 +31,7 @@ public class TwoWayTreeGraphImpl<N> extends AdjacencyListGraphImpl<N> implements
         this.root = root;
 
         this.parentMap = new HashMap<>();
-        GraphIterator iterator = new DepthFirstIterator(this, root);
+        GraphNodeIterator iterator = new DepthFirstIterator(this, root);
         while(iterator.hasNext()) {
             parentMap.put(iterator.next(), iterator.getParent());
         }

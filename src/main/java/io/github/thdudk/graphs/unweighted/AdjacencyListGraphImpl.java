@@ -31,7 +31,11 @@ public class AdjacencyListGraphImpl<N> extends AbstractStructurelessGraph<N> imp
 
     @Override
     public boolean hasEdge(EdgeID id) {
-        if(!(id instanceof GeneratedEdgeID genId)) return false;
+        if(!(id instanceof GeneratedEdgeID genId)) {
+            return adjacencyList.values().stream()
+                .flatMap(Set::stream)
+                .anyMatch(pair -> pair.getEdge().equals(id));
+        };
 
         return getEdgesBetween(genId.start(), genId.end()).contains(genId);
     }

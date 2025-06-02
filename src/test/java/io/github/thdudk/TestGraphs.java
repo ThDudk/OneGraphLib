@@ -11,17 +11,12 @@ import java.io.IOException;
 public abstract class TestGraphs {
     static final ObjectMapper mapper = new ObjectMapper();
 
-    public static void main(String[] args) {
-        Graph<Integer> graph = getCSESShortestRoutesIUnweightedGraph(1);
-    }
-
     @SneakyThrows(IOException.class)
     /// @param num graph number (1-5 inclusive)
     public static Graph<Integer> getCSESShortestRoutesIUnweightedGraph(int num) {
         return mapper.readValue(
             new FileReader("src/test/resources/jackson-serialized/unweighted/cses-problem-sets/shortest-routes-I/" + num + ".json"),
-            new TypeReference<>() {
-            }
+            new TypeReference<>() {}
         );
     }
 }

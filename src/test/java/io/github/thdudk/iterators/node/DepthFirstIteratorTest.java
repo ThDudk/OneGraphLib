@@ -1,12 +1,8 @@
 package io.github.thdudk.iterators.node;
 
-import io.github.thdudk.TestGraphs;
 import io.github.thdudk.builders.unweighted.DistinctDataGraphBuilder;
 import io.github.thdudk.builders.unweighted.DistinctDataGraphBuilderImpl;
-import io.github.thdudk.builders.unweighted.GraphBuilder;
-import io.github.thdudk.builders.unweighted.GraphBuilderImpl;
 import io.github.thdudk.graphs.unweighted.Graph;
-import io.github.thdudk.ids.NodeID;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;

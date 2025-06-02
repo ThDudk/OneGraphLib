@@ -6,6 +6,6 @@ import io.github.thdudk.iterators.node.DepthFirstIterator;
 
 public class DepthFirstEdgeIterator extends AbstractQueueGraphEdgeIterator {
     public DepthFirstEdgeIterator(Graph<?> graph, NodeID root) {
-        super(new DepthFirstIterator.LIFOQueue(), graph, root);
+        super(new DepthFirstIterator.LIFOQueue<>(), graph, root);
     }
 }

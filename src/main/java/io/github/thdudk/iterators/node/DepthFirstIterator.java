@@ -10,18 +10,18 @@ import java.util.LinkedList;
 ///
 /// In other words, it will iterate through a path until it no longer can, then backtrack to take the next available path.
 public class DepthFirstIterator extends AbstractQueueGraphIterator {
-    public static class LIFOQueue extends LinkedList<NodeParentPair> {
+    public static class LIFOQueue<T> extends LinkedList<T> {
         @Override
-        public NodeParentPair poll() {
+        public T poll() {
             return pollLast();
         }
         @Override
-        public NodeParentPair peek() {
+        public T peek() {
             return peekLast();
         }
     }
 
     public DepthFirstIterator(Graph<?> graph, NodeID root) {
-        super(new LIFOQueue(), graph, root);
+        super(new LIFOQueue<>(), graph, root);
     }
 }

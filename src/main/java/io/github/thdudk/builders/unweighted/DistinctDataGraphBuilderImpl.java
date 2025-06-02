@@ -1,5 +1,6 @@
 package io.github.thdudk.builders.unweighted;
 
+import io.github.thdudk.ids.EdgeID;
 import io.github.thdudk.ids.NodeID;
 import io.github.thdudk.restrictions.DistinctDataRestriction;
 
@@ -16,7 +17,7 @@ public class DistinctDataGraphBuilderImpl<N> extends GraphBuilderImpl<N> impleme
 
     @Override
     public NodeID addNode(N data) {
-        if(contains(data)) throw new RuntimeException("Expected distinct data but got a duplicate.");
+        if(contains(data)) return dataToId.get(data);
 
         NodeID id = super.addNode(data);
         dataToId.put(data, id);
@@ -28,7 +29,7 @@ public class DistinctDataGraphBuilderImpl<N> extends GraphBuilderImpl<N> impleme
     }
 
     @Override
-    public void addDirEdge(N start, N end) {
+    public EdgeID addDirEdge(N start, N end) {
         // add start and end if they're not already contained
         if(!contains(start)) addNode(start);
         if(!contains(end)) addNode(end);
@@ -37,7 +38,7 @@ public class DistinctDataGraphBuilderImpl<N> extends GraphBuilderImpl<N> impleme
         NodeID startID = idOf(start);
         NodeID endID = idOf(end);
 
-        addDirEdge(startID, endID);
+        return addDirEdge(startID, endID);
     }
 
     private NodeID idOf(N data) {
