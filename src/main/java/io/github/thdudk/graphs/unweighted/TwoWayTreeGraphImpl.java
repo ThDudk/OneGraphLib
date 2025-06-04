@@ -1,5 +1,6 @@
 package io.github.thdudk.graphs.unweighted;
 
+import io.github.thdudk.GraphUtils;
 import io.github.thdudk.ids.NodeID;
 import io.github.thdudk.iterators.GraphNodeIterator;
 import io.github.thdudk.iterators.node.DepthFirstIterator;
@@ -8,10 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @EqualsAndHashCode(callSuper = true)
 @ToString
@@ -40,5 +38,13 @@ public class TwoWayTreeGraphImpl<N> extends AdjacencyListGraphImpl<N> implements
     @Override
     public Collection<NodeID> getChildren(NodeID node) {
         return getNeighbours(node);
+    }
+
+    @Override
+    public int getDepth(NodeID node) {
+        return GraphUtils.shortestPath(this, root, node)
+            .orElseThrow()
+            .asList()
+            .size();
     }
 }

@@ -34,7 +34,10 @@ public abstract class AbstractQueueGraphEdgeIterator implements GraphEdgeIterato
     @Override
     public EdgeID next() {
         removeVisitedFrontEdges(); // technically not needed as hasNext() also calls this
-        if(!hasNext()) throw new NoSuchElementException();
+        if(!hasNext()) {
+            prevEdge = null; // so getStart() and getEnd() throw NoSuchElementException
+            throw new NoSuchElementException();
+        }
 
         Graph.EdgeDescriptor edge = queue.poll();
         assert edge != null; // to satisfy the compiler
@@ -57,10 +60,14 @@ public abstract class AbstractQueueGraphEdgeIterator implements GraphEdgeIterato
 
     @Override
     public NodeID getStart() {
+        if(prevEdge == null) throw new NoSuchElementException();
+
         return prevEdge.start();
     }
     @Override
     public NodeID getEnd() {
+        if(prevEdge == null) throw new NoSuchElementException();
+
         return prevEdge.end();
     }
 

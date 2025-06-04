@@ -14,7 +14,7 @@ import lombok.NonNull;
 public interface ExplicitIdsGraphBuilder<N> extends MutableRestrictionContainer<N> {
     /// Adds the node while preserving its NodeID.
     ///
-    /// @throws IllegalArgumentException if id is already present or null
+    /// @throws IllegalArgumentException if id is already present
     void addNode(NodeID id, N data);
 
     /// Adds a directed (one way) edge from `root` to `neighbour`
