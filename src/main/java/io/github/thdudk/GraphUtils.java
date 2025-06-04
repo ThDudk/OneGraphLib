@@ -1,6 +1,6 @@
 package io.github.thdudk;
 
-import io.github.thdudk.algorithms.BreadthFirstShortestPathAlgorithm;
+import io.github.thdudk.algorithms.pathfinding.BreadthFirstShortestPathAlgorithm;
 import io.github.thdudk.algorithms.DirectedToUndirectedGraphConverter;
 import io.github.thdudk.algorithms.NodeMaskSubgraph;
 import io.github.thdudk.algorithms.WeaklyConnectedSubgraph;

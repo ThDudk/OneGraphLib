@@ -2,6 +2,7 @@ package io.github.thdudk.restrictions;
 
 import io.github.thdudk.GraphUtils;
 import io.github.thdudk.graphs.unweighted.Graph;
+import io.github.thdudk.serialization.GraphVizExporter;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 

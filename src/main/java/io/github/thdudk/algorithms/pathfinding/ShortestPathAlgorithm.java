@@ -1,4 +1,4 @@
-package io.github.thdudk.algorithms;
+package io.github.thdudk.algorithms.pathfinding;
 
 import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.graphs.unweighted.PathGraph;

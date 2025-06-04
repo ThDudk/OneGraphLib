@@ -22,11 +22,6 @@ public class TwoWayTreeGraphImpl<N> extends AdjacencyListGraphImpl<N> implements
 
     public TwoWayTreeGraphImpl(Collection<GraphRestriction<N>> restrictions, NodeID root, Map<NodeID, Set<EdgeEndpointPair>> adjacencyList, Map<NodeID, N> data) {
         super(restrictions, adjacencyList, data);
-        // TODO BUILDER!!!!
-//        addRestriction(new DirectedRestriction<>());
-//        addRestriction(new MaxInDegreeRestriction<>(1));
-//        addRestriction(new NoMultiEdgesRestriction<>());
-//        addRestriction(new WeaklyConnectedGraphRestriction<>());
 
         this.root = root;
 

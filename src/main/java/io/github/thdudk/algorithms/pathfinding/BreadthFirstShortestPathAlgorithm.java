@@ -1,4 +1,4 @@
-package io.github.thdudk.algorithms;
+package io.github.thdudk.algorithms.pathfinding;
 
 import io.github.thdudk.builders.paths.PathBuilder;
 import io.github.thdudk.builders.paths.PathBuilderImpl;

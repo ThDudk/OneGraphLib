@@ -75,7 +75,7 @@ public class GraphVizExporter {
         return '"' + id.toString() + '{' + graph.getNodeData(id) + '}' + '"';
     }
 
-    public static <T> String serialize(Graph<T> graph) throws JsonProcessingException {
+    public static <T> String serialize(Graph<T> graph) {
         return new GraphVizExporter().serializeGraph(graph);
     }
 }

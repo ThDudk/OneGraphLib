@@ -5,6 +5,7 @@ import io.github.thdudk.graphs.unweighted.Graph;
 import io.github.thdudk.ids.NodeID;
 import io.github.thdudk.iterators.node.DepthFirstIterator;
 import io.github.thdudk.restrictions.UndirectedRestriction;
+import io.github.thdudk.serialization.GraphVizExporter;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,7 +17,7 @@ public class WeaklyConnectedSubgraph {
         if(graph.hasRestriction(new UndirectedRestriction<>())) {
             undirected = graph;
         } else {
-            undirected = GraphUtils.undirectedToDirectedGraph(graph);
+            undirected = GraphUtils.undirectedToDirectedGraph(graph); // TODO this is a lil sketchy...
         }
 
         // find all nodes contained in the island

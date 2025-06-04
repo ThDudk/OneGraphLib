@@ -19,21 +19,14 @@ public class DirectedToUndirectedGraphConverter {
         }
 
         // convert all directed edges into undirected edges
-        for(NodeID node : directed.getNodes()) {
-            for(NodeID neighbour : directed.getNeighbours(node)) {
-                // continue if the edge is undirected
-                if(directed.getNeighbours(neighbour).contains(node)) continue;
+        for(Graph.EdgeDescriptor edge : directed.getEdgeDescriptors()) {
+            builder.addDirEdge(edge.start(), edge.end(), edge.id());
 
-                // add an opposite edge for all directed edges
-                Collection<EdgeID> edgesBetween = directed.getEdgesBetween(node, neighbour);
-                short occurrenceNum = (short) (edgesBetween.size() + 1);
+            // ensure the edge does not have an opposite edge (meaning it's not directed)
+            if(!directed.getEdgesBetween(edge.end(), edge.start()).isEmpty()) continue;
 
-                for(EdgeID edgeID : edgesBetween) {
-                    // use a generated edge for the edgeID
-                    builder.addDirEdge(neighbour, node, new GeneratedEdgeID(node, neighbour, occurrenceNum));
-                    occurrenceNum++;
-                }
-            }
+            // add an opposite edge (with a generated ID)
+            builder.addDirEdge(edge.end(), edge.start(), new GeneratedEdgeID(edge.start(), edge.end(), (short) 1));
         }
 
         return builder.build();

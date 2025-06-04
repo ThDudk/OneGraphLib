@@ -54,6 +54,8 @@ public class ExplicitIdsGraphBuilderImpl<N> extends AbstractMutableRestrictionCo
 
     @Override
     public void addNode(NodeID id, N data) {
+        Objects.requireNonNull(id);
+
         if(nodeData.containsKey(id)) {
             throw new IllegalArgumentException("id " + id +  " is already contained in this graph");
         }
@@ -63,6 +65,11 @@ public class ExplicitIdsGraphBuilderImpl<N> extends AbstractMutableRestrictionCo
 
     @Override
     public void addDirEdge(NodeID root, NodeID neighbour, EdgeID edgeId) {
+        Objects.requireNonNull(edgeId);
+
+        if(!nodeData.containsKey(root) || !nodeData.containsKey(neighbour)) throw new IllegalArgumentException("Nodes must exist in graph.");
+
+        // TODO this may be pretty inefficient :skull:
         if(adjacencyList.values().stream()
             .flatMap(Collection::stream)
             .map(Graph.EdgeEndpointPair::getEdge)
