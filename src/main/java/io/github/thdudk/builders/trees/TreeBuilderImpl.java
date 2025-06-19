@@ -53,7 +53,7 @@ public class TreeBuilderImpl<N> extends AbstractMutableRestrictionContainer<N> i
         Graph<N> graph = builder.build();
 
         // convert from Map<NodeID, Collection<Graph.EdgeEndpointPair>> to Map<NodeID, Set<Graph.EdgeEndpointPair>>
-        Map<NodeID, Set<Graph.EdgeEndpointPair>> adjacencyList = graph.getAdjacencyList()
+        Map<NodeID, Collection<Graph.EdgeEndpointPair>> adjacencyList = graph.getAdjacencyList()
             .entrySet()
             .stream()
             .map(a -> Map.entry(a.getKey(), new HashSet<>(a.getValue())))

@@ -16,6 +16,7 @@ public interface ExplicitIdsGraphBuilder<N> extends MutableRestrictionContainer<
     ///
     /// @throws IllegalArgumentException if id is already present
     void addNode(NodeID id, N data);
+    N removeNode(NodeID id);
 
     /// Adds a directed (one way) edge from `root` to `neighbour`
     ///
@@ -33,6 +34,7 @@ public interface ExplicitIdsGraphBuilder<N> extends MutableRestrictionContainer<
         addDirEdge(node1, node2, oneToTwo);
         addDirEdge(node2, node1, twoToOne);
     }
+    Graph.EdgeDescriptor removeEdge(EdgeID id);
 
     static <N> ExplicitIdsGraphBuilder<N> copyOf(Graph<N> graph) {
         return new ExplicitIdsGraphBuilderImpl<>(graph);

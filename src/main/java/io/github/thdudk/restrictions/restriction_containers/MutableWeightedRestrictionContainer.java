@@ -13,4 +13,10 @@ public interface MutableWeightedRestrictionContainer<N, E> extends WeightedRestr
         return this;
     }
     MutableWeightedRestrictionContainer<N, E> removeEdgeRestriction(GraphEdgeRestriction<N, E> restriction);
+    default MutableWeightedRestrictionContainer<N, E> removeAllEdgeRestrictions() {
+        for(GraphEdgeRestriction<N, E> restriction : getEdgeRestrictions()) {
+            removeEdgeRestriction(restriction);
+        }
+        return this;
+    }
 }

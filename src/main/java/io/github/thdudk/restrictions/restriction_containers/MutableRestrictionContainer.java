@@ -13,4 +13,10 @@ public interface MutableRestrictionContainer<N> extends RestrictionContainer<N> 
         return this;
     }
     MutableRestrictionContainer<N> removeRestriction(GraphRestriction<N> restriction);
+    default MutableRestrictionContainer<N> removeAllRestrictions() {
+        for(GraphRestriction<N> restriction : getRestrictions()) {
+            removeRestriction(restriction);
+        }
+        return this;
+    }
 }

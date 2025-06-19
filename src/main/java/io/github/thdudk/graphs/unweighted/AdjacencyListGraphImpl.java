@@ -9,10 +9,7 @@ import io.github.thdudk.restrictions.GraphRestriction;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @EqualsAndHashCode(callSuper = true)
@@ -22,18 +19,24 @@ public class AdjacencyListGraphImpl<N> extends AbstractStructurelessGraph<N> imp
 
     public AdjacencyListGraphImpl(
         Collection<GraphRestriction<N>> restrictions,
-        Map<NodeID, Set<Graph.EdgeEndpointPair>> adjacencyList,
+        Map<NodeID, Collection<Graph.EdgeEndpointPair>> adjacencyList,
         Map<NodeID, N> nodeData
     ) {
         super(nodeData, restrictions);
-        this.adjacencyList = adjacencyList;
+
+        Map<NodeID, Set<Graph.EdgeEndpointPair>> adjList = new HashMap<>();
+        for(Map.Entry<NodeID, Collection<Graph.EdgeEndpointPair>> entry : adjacencyList.entrySet()) {
+            adjList.put(entry.getKey(), Set.copyOf(entry.getValue()));
+        }
+
+        this.adjacencyList = adjList;
     }
 
     @Override
     public boolean hasEdge(EdgeID id) {
         if(!(id instanceof GeneratedEdgeID genId)) {
             return adjacencyList.values().stream()
-                .flatMap(Set::stream)
+                .flatMap(Collection::stream)
                 .anyMatch(pair -> pair.getEdge().equals(id));
         };
 

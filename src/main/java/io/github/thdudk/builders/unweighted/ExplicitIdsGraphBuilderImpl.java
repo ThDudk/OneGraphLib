@@ -15,7 +15,7 @@ import java.util.*;
 @NoArgsConstructor
 public class ExplicitIdsGraphBuilderImpl<N> extends AbstractMutableRestrictionContainer<N> implements ExplicitIdsGraphBuilder<N> {
     // TODO re-evaluate these guys being protected. Protected helper functions may be better
-    protected final Map<NodeID, Set<Graph.EdgeEndpointPair>> adjacencyList = new HashMap<>();
+    protected final Map<NodeID, Collection<Graph.EdgeEndpointPair>> adjacencyList = new HashMap<>();
     protected final Map<NodeID, N> nodeData = new HashMap<>();
 
     /// Creates a builder copy of the given graph.
@@ -64,6 +64,15 @@ public class ExplicitIdsGraphBuilderImpl<N> extends AbstractMutableRestrictionCo
     }
 
     @Override
+    public N removeNode(NodeID id) {
+        adjacencyList.remove(id);
+        for(Map.Entry<NodeID, Collection<Graph.EdgeEndpointPair>> node : adjacencyList.entrySet()) {
+            node.getValue().removeIf(pair -> pair.getEndpoint().equals(id));
+        }
+        return nodeData.remove(id);
+    }
+
+    @Override
     public void addDirEdge(NodeID root, NodeID neighbour, EdgeID edgeId) {
         Objects.requireNonNull(edgeId);
 
@@ -83,13 +92,31 @@ public class ExplicitIdsGraphBuilderImpl<N> extends AbstractMutableRestrictionCo
     }
 
     @Override
+    public Graph.EdgeDescriptor removeEdge(EdgeID id) {
+        Graph<N> graph = buildWithoutCheckingRestrictions();
+
+        Graph.EdgeDescriptor edge = graph.getEdgeDescriptors()
+            .stream()
+            .filter(pair -> pair.id().equals(id))
+            .findAny()
+            .orElseThrow();
+
+        adjacencyList.get(edge.start()).remove(new Graph.EdgeEndpointPair(edge.id(), edge.end()));
+        return edge;
+    }
+
+    @Override
     public Graph<N> build() {
-        Graph<N> graph = new AdjacencyListGraphImpl<>(getRestrictions(), adjacencyList, nodeData);
+        Graph<N> graph = buildWithoutCheckingRestrictions();
 
         for(GraphRestriction<N> restriction : getRestrictions()) {
             if(!restriction.isSatisfied(graph)) throw new RuntimeException("Graph does not satisfy restriction: " + restriction);
         }
 
         return graph;
+    }
+
+    private Graph<N> buildWithoutCheckingRestrictions() {
+        return new AdjacencyListGraphImpl<>(getRestrictions(), adjacencyList, nodeData);
     }
 }

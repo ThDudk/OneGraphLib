@@ -14,7 +14,6 @@ public abstract class TestUtils {
     }
 
     static void serializeCSESAsUnweightedTestGraph(int num) throws IOException {
-        // read in graph
         DistinctDataGraphBuilder<String> builder = new DistinctDataGraphBuilderImpl<>();
         BufferedReader reader = new BufferedReader(new FileReader("src/test/resources/raw/cses-problem-sets/shortest-routes-I/" + num + ".in"));
         reader.readLine();

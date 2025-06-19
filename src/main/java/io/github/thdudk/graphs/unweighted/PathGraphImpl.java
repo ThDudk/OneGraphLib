@@ -1,5 +1,6 @@
 package io.github.thdudk.graphs.unweighted;
 
+import com.fasterxml.jackson.databind.deser.std.CollectionDeserializer;
 import io.github.thdudk.ids.NodeID;
 import io.github.thdudk.iterators.GraphNodeIterator;
 import io.github.thdudk.iterators.node.DepthFirstIterator;
@@ -19,7 +20,7 @@ public class PathGraphImpl<N> extends AdjacencyListGraphImpl<N> implements PathG
 
     public PathGraphImpl(
         Collection<GraphRestriction<N>> graphRestrictions,
-        Map<NodeID, Set<EdgeEndpointPair>> adjacencyList,
+        Map<NodeID, Collection<EdgeEndpointPair>> adjacencyList,
         Map<NodeID, N> nodeData,
         NodeID root,
         NodeID end
