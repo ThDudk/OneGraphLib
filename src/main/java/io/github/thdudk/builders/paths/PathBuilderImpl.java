@@ -10,6 +10,7 @@ import io.github.thdudk.ids.NodeID;
 import io.github.thdudk.restrictions.DirectedRestriction;
 import io.github.thdudk.restrictions.MaxDegreeRestriction;
 import io.github.thdudk.restrictions.NoMultiEdgesRestriction;
+import io.github.thdudk.restrictions.WeaklyConnectedGraphRestriction;
 import io.github.thdudk.restrictions.restriction_containers.AbstractMutableRestrictionContainer;
 import io.github.thdudk.serialization.GraphVizExporter;
 import lombok.ToString;
@@ -26,6 +27,7 @@ public class PathBuilderImpl<N> extends AbstractMutableRestrictionContainer<N> i
         addRestriction(new NoMultiEdgesRestriction<>());
         addRestriction(new DirectedRestriction<>());
         addRestriction(new MaxDegreeRestriction<>(1));
+        addRestriction(new WeaklyConnectedGraphRestriction<>());
     }
 
     @Override
