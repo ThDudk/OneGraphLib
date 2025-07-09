@@ -17,6 +17,7 @@ public class ExplicitIdsGraphBuilderImpl<N> extends AbstractMutableRestrictionCo
     // TODO re-evaluate these guys being protected. Protected helper functions may be better
     protected final Map<NodeID, Collection<Graph.EdgeEndpointPair>> adjacencyList = new HashMap<>();
     protected final Map<NodeID, N> nodeData = new HashMap<>();
+    protected final Set<EdgeID> edgeIds = new HashSet<>();
 
     /// Creates a builder copy of the given graph.
     ///
@@ -78,15 +79,8 @@ public class ExplicitIdsGraphBuilderImpl<N> extends AbstractMutableRestrictionCo
 
         if(!nodeData.containsKey(root) || !nodeData.containsKey(neighbour)) throw new IllegalArgumentException("Nodes must exist in graph.");
 
-        // TODO this may be pretty inefficient :skull:
-        if(adjacencyList.values().stream()
-            .flatMap(Collection::stream)
-            .map(Graph.EdgeEndpointPair::getEdge)
-            .toList()
-            .contains(edgeId)
-        ) {
-            throw new RuntimeException("Cannot have duplicate edgeIds");
-        }
+        if(edgeIds.contains(edgeId)) throw new RuntimeException("cannot have duplicate edgeIDs");
+        edgeIds.add(edgeId);
 
         adjacencyList.get(root).add(new Graph.EdgeEndpointPair(edgeId, neighbour));
     }
@@ -101,6 +95,7 @@ public class ExplicitIdsGraphBuilderImpl<N> extends AbstractMutableRestrictionCo
             .findAny()
             .orElseThrow();
 
+        edgeIds.remove(id);
         adjacencyList.get(edge.start()).remove(new Graph.EdgeEndpointPair(edge.id(), edge.end()));
         return edge;
     }
